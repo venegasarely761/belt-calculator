@@ -37,37 +37,39 @@ section { min-width: 0; }
 .card { background: var(--white); border: 1px solid var(--line); border-radius: 16px; box-shadow: 0 1px 2px rgba(0, 90, 156, 0.06), 0 8px 24px rgba(0, 90, 156, 0.08); padding: 20px; display: grid; gap: 18px; }
 .card h2 { margin: 0; font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--blue); }
 
-.fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 12px; }
+.fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 12px; }
 .fld { display: grid; gap: 6px; align-content: start; min-width: 0; }
 .fld > label, .fld > .lbl { font-weight: 500; }
 .unit-field { display: flex; align-items: center; background: var(--blue-50); border: 1.5px solid var(--line); border-radius: 10px; padding-right: 12px; }
 .unit-field:focus-within { border-color: var(--blue); background: var(--white); }
-.field { width: 100%; min-width: 0; border: 0; background: transparent; font: 500 18px var(--font); color: var(--ink); padding: 10px 6px 10px 12px; outline: none; font-variant-numeric: tabular-nums; }
+.field { width: 100%; min-width: 0; border: 0; background: transparent; font: 500 15px var(--font); color: var(--ink); padding: 8px 6px 8px 12px; outline: none; font-variant-numeric: tabular-nums; }
 .field::-webkit-outer-spin-button, .field::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 .field { -moz-appearance: textfield; appearance: textfield; }
 .unit-field span { color: var(--ink-soft); font-weight: 500; }
-.select { width: 100%; background: var(--blue-50); border: 1.5px solid var(--line); border-radius: 10px; font: 500 18px var(--font); color: var(--ink); padding: 10px 12px; outline: none; }
+.select { width: 100%; background: var(--blue-50); border: 1.5px solid var(--line); border-radius: 10px; font: 500 15px var(--font); color: var(--ink); padding: 8px 12px; outline: none; }
 .select:focus { border-color: var(--blue); background: var(--white); }
 .hint { font-size: 13px; color: var(--ink-soft); }
 .fld-row[hidden] { display: none; }
 .sub-grp { margin-left: 8px; }
 .fld-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-start; gap: 8px 16px; }
-.card-sub { display: grid; gap: 14px; }
+.card-sub { display: grid; gap: 10px; }
+main > section:first-child .card { gap: 12px; }
+main > section:first-child .fld { gap: 4px; }
 .card-sub[hidden], .fld[hidden] { display: none; }
 .fld-row .lbl { font-weight: 500; }
 .toggle { position: relative; display: inline-flex; gap: 6px; }
 .toggle input { position: absolute; opacity: 0; pointer-events: none; }
-.toggle label { display: inline-flex; align-items: center; padding: 8px 18px; border: 1.5px solid var(--line); border-radius: 10px; background: var(--blue-50); cursor: pointer; font-weight: 500; }
+.toggle label { display: inline-flex; align-items: center; font-size: 12.5px; padding: 6px 14px; border: 1.5px solid var(--line); border-radius: 10px; background: var(--blue-50); cursor: pointer; font-weight: 500; }
 .toggle input:checked + label { border-color: var(--blue); background: var(--blue-100); color: var(--blue-deep); }
 .toggle input:focus-visible + label { outline: 3px solid var(--blue-soft); outline-offset: 2px; }
 .btn { display: inline-flex; align-items: center; padding: 10px 18px; border-radius: 10px; background: var(--blue); color: var(--white); font-weight: 500; text-decoration: none; }
 .btn:hover { background: var(--blue-deep); }
-.btn { border: 0; font: 500 15px var(--font); cursor: pointer; justify-content: center; width: 100%; margin-top: 10px; }
-#addAll { margin-top: 0; text-decoration: none; }
+.btn { border: 0; font: 700 15px var(--font); cursor: pointer; justify-content: center; width: 100%; margin-top: 10px; }
+#addAll { margin-top: 0; text-decoration: none; gap: 8px; }
 .btn:focus-visible { outline: 3px solid var(--blue-soft); outline-offset: 2px; }
 .unit-field .mini { position: relative; display: inline-flex; gap: 2px; padding: 2px; background: var(--blue-100); border-radius: 8px; }
 .mini input { position: absolute; opacity: 0; pointer-events: none; }
-.mini label { padding: 3px 10px; border-radius: 6px; font-size: 13px; font-weight: 500; color: var(--ink-soft); cursor: pointer; }
+.mini label { padding: 3px 9px; border-radius: 6px; font-size: 12px; font-weight: 500; color: var(--ink-soft); cursor: pointer; }
 .mini input:checked + label { background: var(--blue); color: var(--white); }
 .mini input:focus-visible + label { outline: 3px solid var(--blue-soft); outline-offset: 1px; }
 .card-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
@@ -75,12 +77,12 @@ section { min-width: 0; }
 .srow { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-top: 1px solid var(--line); }
 .srow:first-child { border-top: 0; }
 .srow .meta { flex: 1; min-width: 0; }
-.srow .meta strong { display: block; font-size: 16px; }
-.srow .meta span { font-size: 13px; color: var(--ink-soft); }
+.srow .meta strong { display: block; font-size: 14.5px; }
+.srow .meta span { font-size: 10.5px; color: var(--ink-soft); }
 .qty { display: inline-flex; align-items: center; gap: 4px; background: var(--blue-50); border: 1.5px solid var(--line); border-radius: 10px; padding: 2px; }
-.qty button { width: 30px; height: 30px; border: 0; background: transparent; color: var(--blue-deep); font: 500 18px var(--font); cursor: pointer; border-radius: 8px; }
+.qty button { width: 26px; height: 26px; border: 0; background: transparent; color: var(--blue-deep); font: 500 17px var(--font); cursor: pointer; border-radius: 8px; }
 .qty button:hover { background: var(--blue-100); }
-.qty span { min-width: 22px; text-align: center; font-weight: 500; }
+.qty span { min-width: 22px; text-align: center; font-weight: 500; font-size: 14px; }
 .rm { border: 0; background: none; color: var(--ink-soft); text-decoration: underline; cursor: pointer; font: 400 13px var(--font); }
 .sub-h { margin: 0; font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-soft); }
 
@@ -88,8 +90,8 @@ section { min-width: 0; }
 .seg-group.c3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .seg-group.c2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .seg-group input { position: absolute; opacity: 0; pointer-events: none; }
-.seg-group label { display: grid; gap: 2px; padding: 8px 12px; border: 1.5px solid var(--line); border-radius: 10px; background: var(--blue-50); cursor: pointer; font-weight: 500; }
-.seg-group label small { font-weight: 400; font-size: 12px; color: var(--ink-soft); }
+.seg-group label { display: grid; gap: 2px; padding: 6px 10px; border: 1.5px solid var(--line); border-radius: 10px; background: var(--blue-50); cursor: pointer; font-weight: 500; font-size: 12.5px; }
+.seg-group label small { font-weight: 400; font-size: 10.5px; color: var(--ink-soft); }
 .seg-group input:checked + label { border-color: var(--blue); background: var(--blue-100); color: var(--blue-deep); }
 .seg-group input:focus-visible + label, .select:focus-visible { outline: 3px solid var(--blue-soft); outline-offset: 2px; }
 
@@ -131,7 +133,7 @@ tr.head td { border-top: 1.5px solid var(--blue); font-weight: 700; color: var(-
 
 <div class="shell">
 <header class="banner">
-  <span class="ver">v1.8.2</span>
+  <span class="ver">v1.8.13</span>
   <h1>Belt Calculator</h1>
   <p>Belt length and center distance for a two-pulley belt drive</p>
 </header>
@@ -178,11 +180,11 @@ tr.head td { border-top: 1.5px solid var(--blue); font-weight: 700; color: var(-
       <div id="cdFields" class="card-sub">
         <div class="fields">
           <div class="fld">
-            <label for="cd">Desired center</label>
+            <label for="cd">Desired Center</label>
             <span class="unit-field"><input class="field" id="cd" type="number" inputmode="decimal" step="any" min="0" value="4"><span class="mini" role="radiogroup" aria-label="Units"><input type="radio" name="unit" id="u-in" value="in" checked><label for="u-in">in</label><input type="radio" name="unit" id="u-mm" value="mm"><label for="u-mm">mm</label></span></span>
           </div>
           <div class="fld">
-            <label for="ex">Extra center</label>
+            <label for="ex">Extra Center</label>
             <span class="unit-field"><input class="field" id="ex" type="number" inputmode="decimal" step="any" min="0" value="0"><span class="usfx">in</span></span>
           </div>
         </div>
@@ -190,7 +192,7 @@ tr.head td { border-top: 1.5px solid var(--blue); font-weight: 700; color: var(-
       </div>
 
       <div class="fld" id="btFields" hidden>
-        <label for="bt">Belt teeth</label>
+        <label for="bt">Belt Teeth</label>
         <span class="unit-field"><input class="field" id="bt" type="number" inputmode="numeric" step="1" min="1" value="90"><span>Teeth</span></span>
         <span class="hint">Enter the tooth count of the belt you have.</span>
       </div>
@@ -213,9 +215,9 @@ tr.head td { border-top: 1.5px solid var(--blue); font-weight: 700; color: var(-
 
   <section aria-labelledby="sv-h" id="savedSec" hidden>
     <div class="card">
-      <div class="card-head"><h2 id="sv-h">Saved belts</h2><button type="button" class="rm" id="clearAll">Clear all</button></div>
+      <div class="card-head"><h2 id="sv-h">Saved belts</h2><button type="button" class="rm" id="clearAll">Clear All</button></div>
       <ul class="slist" id="savedList"></ul>
-      <a class="btn" id="addAll" href="https://wcproducts.com/cart/" target="_blank" rel="noopener">Add To Cart</a>
+      <a class="btn" id="addAll" href="https://wcproducts.com/cart/" target="_blank" rel="noopener"><svg class="ico" viewBox="0 0 576 512" width="16" height="16" aria-hidden="true" fill="currentColor"><path d="M0 24C0 10.7 10.7 0 24 0H69.5c22 0 41.5 12.8 50.6 32h411c26.3 0 45.5 25 38.6 50.4l-41 152.3c-8.5 31.4-37 53.3-69.5 53.3H170.7l5.4 28.5c2.2 11.3 12.1 19.5 23.6 19.5H488c13.3 0 24 10.7 24 24s-10.7 24-24 24H199.7c-34.6 0-64.3-24.6-70.7-58.5L77.4 54.5c-.7-3.8-4-6.5-7.9-6.5H24C10.7 48 0 37.3 0 24zM128 464a48 48 0 1 1 96 0 48 48 0 1 1-96 0zm336-48a48 48 0 1 1 0 96 48 48 0 1 1 0-96z"/></svg>Add To Cart</a>
       <span class="hint">Opens wcproducts.com in a new tab with every saved belt in your cart.</span>
     </div>
   </section>
@@ -250,7 +252,7 @@ tr.head td { border-top: 1.5px solid var(--blue); font-weight: 700; color: var(-
     Array.prototype.forEach.call(document.querySelectorAll(".save"), function (b) {
       var t = parseInt(b.getAttribute("data-teeth"), 10);
       var on = saved.some(function (it) { return it.pitch === p && it.width === w && it.teeth === t; });
-      b.textContent = on ? "Saved \u2713" : "Save belt";
+      b.textContent = on ? "Saved \u2713" : "Save Belt";
     });
   }
   function renderSaved() {
@@ -258,7 +260,7 @@ tr.head td { border-top: 1.5px solid var(--blue); font-weight: 700; color: var(-
     $("savedSec").hidden = saved.length === 0;
     $("addAll").href = cartLink();
     $("savedList").innerHTML = saved.map(function (it, i) {
-      return '<li class="srow" data-i="' + i + '"><div class="meta"><strong>' + it.teeth + ' teeth</strong><span>' + esc(beltName(it)) + '</span></div>' +
+      return '<li class="srow" data-i="' + i + '"><div class="meta"><strong>' + it.teeth + ' Teeth</strong><span>' + esc(beltName(it)) + '</span></div>' +
         '<div class="qty"><button type="button" data-act="dec" aria-label="Fewer">&minus;</button><span>' + it.qty + '</span><button type="button" data-act="inc" aria-label="More">+</button></div>' +
         '<button type="button" class="rm" data-act="rm">Remove</button></li>';
     }).join("");
@@ -267,6 +269,8 @@ tr.head td { border-top: 1.5px solid var(--blue); font-weight: 700; color: var(-
     var w = pitch === 5 ? width : "";
     var hit = saved.filter(function (it) { return it.pitch === pitch && it.width === w && it.teeth === teeth; })[0];
     if (hit) hit.qty++; else saved.push({ pitch: pitch, width: w, teeth: teeth, qty: 1 });
+    // smallest belt to largest
+    saved.sort(function (a, b) { return a.teeth - b.teeth || a.pitch - b.pitch || String(a.width).localeCompare(String(b.width)); });
     renderSaved();
   }
   function belt(pitch, width, teeth) { return ((BELTS[String(pitch)] || {})[pitch === 5 ? width : ""] || {})[teeth] || null; }
@@ -346,7 +350,7 @@ tr.head td { border-top: 1.5px solid var(--blue); font-weight: 700; color: var(-
     var D1 = t1 * pitch / Math.PI, D2 = t2 * pitch / Math.PI;
     var rows = "", tiles = "";
     var ratio = t2 >= t1 ? t2 / t1 : t1 / t2;
-    var ratioTile = tile(f(ratio, 2) + " : 1", "Ratio", t2 > t1 ? "speed reduction" : t2 < t1 ? "speed increase" : "1 to 1");
+    var ratioTile = tile(f(ratio, 2) + " : 1", "Ratio", t2 > t1 ? "Speed Reduction" : t2 < t1 ? "Speed Increase" : "1 to 1");
 
     if (mode === 1) {
       var c = parseFloat($("cd").value);
@@ -355,21 +359,21 @@ tr.head td { border-top: 1.5px solid var(--blue); font-weight: 700; color: var(-
       var cmm = toMM(c + ex);
       if (cmm <= Math.abs(D2 - D1) / 2) { bad("Center distance is too small for these pulleys. The belt cannot wrap them."); return; }
       var L = beltLen(cmm, D1, D2), teeth = L / pitch;
-      setStatus(false, f(inch(L), 3) + " in", f(L, 2) + " mm  |  " + f(teeth, 2) + " teeth (exact)", "Belt length needed");
+      setStatus(false, f(inch(L), 3) + " in", f(L, 2) + " mm", "Belt Pitch Length");
       tiles = tile(f(inch(D1), 3) + " in", "Pulley 1", "Pitch Diameter " + f(D1, 2) + " mm") +
               tile(f(inch(D2), 3) + " in", "Pulley 2", "Pitch Diameter " + f(D2, 2) + " mm") +
               ratioTile;
-      if (ex > 0) rows += row("Center distance used", both(cmm) + " (desired + extra)");
+      if (ex > 0) rows += row("Center Distance Used", both(cmm) + " (desired + extra)");
 
       var list = sizesFor(pitch), ci = 0;
       list.forEach(function (n, i) { if (Math.abs(n - teeth) <= Math.abs(list[ci] - teeth)) ci = i; });
       var opt = function (i, label, hl) {
         if (i < 0 || i >= list.length) return tile("None", label, "no WCP size", hl);
         var n = list[i], cc = centerFor(n * pitch, D1, D2);
-        var btn = cc === null ? "" : '<button type="button" class="btn save" data-teeth="' + n + '">Save belt</button>';
-        return tile(n + " teeth", label, cc === null ? "too short for these pulleys" : "center " + f(inch(cc), 3) + " in (" + f(cc, 2) + " mm)", hl, btn);
+        var btn = cc === null ? "" : '<button type="button" class="btn save" data-teeth="' + n + '">Save Belt</button>';
+        return tile(n + " Teeth", label, cc === null ? "too short for these pulleys" : "Center " + f(inch(cc), 3) + " in (" + f(cc, 2) + " mm)", hl, btn);
       };
-      $("optTiles").innerHTML = opt(ci - 1, "Shorter belt") + opt(ci, "Closest belt", true) + opt(ci + 1, "Longer belt");
+      $("optTiles").innerHTML = opt(ci - 1, "Shorter Belt") + opt(ci, "Closest Belt", true) + opt(ci + 1, "Longer Belt");
       $("opts").hidden = false;
       markSaved();
     } else {
@@ -377,18 +381,18 @@ tr.head td { border-top: 1.5px solid var(--blue); font-weight: 700; color: var(-
       if (!(n2 > 0)) { bad("Enter the belt tooth count."); return; }
       var cc2 = centerFor(n2 * pitch, D1, D2);
       if (cc2 === null) { bad("This belt is too short to wrap both pulleys."); return; }
-      setStatus(false, f(inch(cc2), 3) + " in", f(cc2, 2) + " mm  |  with a " + n2 + " tooth belt", "Center distance");
+      setStatus(false, f(inch(cc2), 3) + " in", f(cc2, 2) + " mm", "Center Distance");
       tiles = tile(f(inch(D1), 3) + " in", "Pulley 1", "Pitch Diameter " + f(D1, 2) + " mm") +
               tile(f(inch(D2), 3) + " in", "Pulley 2", "Pitch Diameter " + f(D2, 2) + " mm") +
               ratioTile;
-      rows += row("Belt pitch length", both(n2 * pitch));
+      rows += row("Belt Pitch Length", both(n2 * pitch));
       var list = sizesFor(pitch);
       if (list.indexOf(n2) !== -1) {
-        rows += row("WCP sells this size", "yes");
+        rows += row("WCP Sells This Size", "yes");
       } else {
         var b = null, a = null;
         list.forEach(function (n) { if (n < n2) b = n; if (n > n2 && a === null) a = n; });
-        rows += row("WCP sells this size", "no, nearest are " + [b, a].filter(function (x) { return x !== null; }).join(" and ") + " teeth");
+        rows += row("WCP Sells This Size", "no, nearest are " + [b, a].filter(function (x) { return x !== null; }).join(" and ") + " Teeth");
       }
     }
     $("tiles").innerHTML = tiles;
