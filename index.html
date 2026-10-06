@@ -131,7 +131,7 @@ tr.head td { border-top: 1.5px solid var(--blue); font-weight: 700; color: var(-
 
 <div class="shell">
 <header class="banner">
-  <span class="ver">v1.8.1</span>
+  <span class="ver">v1.8.2</span>
   <h1>Belt Calculator</h1>
   <p>Belt length and center distance for a two-pulley belt drive</p>
 </header>
@@ -240,7 +240,7 @@ tr.head td { border-top: 1.5px solid var(--blue); font-weight: 700; color: var(-
            "15": {"30":["WCP-0161",35666728386720],"35":["WCP-0525",43330960720084],"40":["WCP-0526",43330962751700],"44":["WCP-2434",47403597267156],"45":["WCP-0163",35666728550560],"50":["WCP-0527",43330963898580],"55":["WCP-0165",35666728681632],"60":["WCP-0644",35666655510688],"64":["WCP-1779",45898567385300],"65":["WCP-0528",43330971631828],"70":["WCP-0645",35666674679968],"75":["WCP-0529",43330977726676],"80":["WCP-0646",35666674712736],"85":["WCP-0530",43330999025876],"90":["WCP-0647",35666675007648],"95":["WCP-0531",43331000107220],"100":["WCP-0648",35666675269792],"104":["WCP-0649",35666676318368],"105":["WCP-0532",43331005219028],"110":["WCP-0650",35666676908192],"115":["WCP-0533",43331006070996],"120":["WCP-0651",35666676940960],"125":["WCP-0534",43331006300372],"130":["WCP-0652",35666677006496],"135":["WCP-0535",43331088351444],"140":["WCP-0653",35666677498016],"145":["WCP-0536",43331089957076],"150":["WCP-0654",35666677596320],"155":["WCP-1780",45898568302804],"160":["WCP-0655",35666677629088],"165":["WCP-1781",45898569973972],"170":["WCP-0656",35666677825696],"175":["WCP-1782",45898570432724],"180":["WCP-0657",35666678481056],"185":["WCP-1783",45898571481300],"190":["WCP-0537",43331090907348],"195":["WCP-1784",45898582032596],"200":["WCP-0658",35666678579360],"210":["WCP-1785",45898587930836],"220":["WCP-1786",45898588553428],"225":["WCP-0659",35666678644896],"230":["WCP-1787",45898590847188],"240":["WCP-1788",45898613129428],"250":["WCP-0660",35666679136416],"260":["WCP-1789",45898618667220],"270":["WCP-1790",45898620076244],"280":["WCP-1791",45898621223124],"290":["WCP-1792",45898633117908],"300":["WCP-1793",45898679812308]} },
     "3": { "": {"45":["WCP-0666",35666704531616],"50":["WCP-0667",35666704892064],"55":["WCP-0668",35666704990368],"60":["WCP-0669",35666705023136],"65":["WCP-1046",42165156020436],"70":["WCP-0670",35666705055904],"75":["WCP-1047",42165169619156],"80":["WCP-1048",42165173027028],"85":["WCP-0671",35666705121440],"90":["WCP-0672",35666705154208],"95":["WCP-1049",42165173453012],"100":["WCP-0673",35666705186976],"105":["WCP-0674",35666705219744],"110":["WCP-0675",35666705285280],"115":["WCP-1050",35666709151904],"120":["WCP-0676",35666705318048],"125":["WCP-0677",35666705383584],"130":["WCP-1051",42165174927572],"140":["WCP-0678",35666705416352],"150":["WCP-1052",42165175025876],"160":["WCP-1053",42165175910612],"170":["WCP-1054",42165177712852],"180":["WCP-0679",35666705449120],"190":["WCP-1055",42165178040532],"200":["WCP-1056",42165178532052]} }
   };
-  var CART_URL = "https://wcproducts.com/cart/";
+  var CART_URL = "https://wcproducts.com/cart/add";
   // Saved belts live in memory only, so they reset when the page reloads.
   var saved = [];
   function beltName(it) { return (it.pitch === 3 ? "GT2" : "HTD 5M") + (it.pitch === 5 ? " | " + it.width + " mm wide" : ""); }
@@ -272,12 +272,17 @@ tr.head td { border-top: 1.5px solid var(--blue); font-weight: 700; color: var(-
   function belt(pitch, width, teeth) { return ((BELTS[String(pitch)] || {})[pitch === 5 ? width : ""] || {})[teeth] || null; }
   // https://wcproducts.com/cart/<variant id>:<quantity>,<variant id>:<quantity>
   function cartLink() {
-    var parts = [];
+    // Standard add-to-cart request (adds to the shopper's current cart instead of
+    // building a new one), then lands on the cart page.
+    var q = [];
     saved.forEach(function (it) {
       var b = belt(it.pitch, it.width, it.teeth);
-      if (b) parts.push(b[1] + ":" + it.qty);
+      if (b) {
+        var n = q.length / 2;
+        q.push("items[" + n + "][id]=" + b[1], "items[" + n + "][quantity]=" + it.qty);
+      }
     });
-    return CART_URL + parts.join(",");
+    return CART_URL + "?" + q.join("&") + "&return_to=/cart";
   }
   // Sizes WCP sells for this belt: the BELTS table when it has entries (the HTD widths
   // differ), otherwise the general list above.
