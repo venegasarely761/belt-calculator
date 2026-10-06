@@ -4,110 +4,297 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Belt Calculator</title>
-<meta name="twitter:card" content="player">
-<meta name="twitter:title" content="Belt Calculator">
-<meta name="twitter:player" content="https://venegasarely761.github.io/belt-calc/">
-<meta name="twitter:player:width" content="720">
-<meta name="twitter:player:height" content="700">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
 <style>
-  :root {
-    --blue: #0075c9;
-    --blue-dark: #005a9c;
-    --cream: #faf6ec;
-    --ink: #1f2933;
-    --line: #cfd8e3;
-    color-scheme: light;
-  }
-  * { box-sizing: border-box; }
-  html, body { margin: 0; background: var(--cream); color: var(--ink);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
-  .wrap { max-width: 760px; margin: 0 auto; padding: 0 16px 24px; }
-  header { position: relative; background: var(--blue); color: #fff; padding: 14px 16px; margin: 0 -16px 16px; }
-  .ver { position: absolute; top: 8px; right: 14px; font-size: .7rem; opacity: .85; }
-  header h1 { margin: 0; font-size: 1.15rem; }
-  header p { margin: 2px 0 0; font-size: .85rem; opacity: .9; }
-  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; }
-  label { display: block; font-size: .8rem; font-weight: 600; margin-bottom: 4px; color: var(--blue-dark); }
-  input, select { width: 100%; padding: 9px 10px; font-size: 1rem; border: 1px solid var(--line);
-    border-radius: 6px; background: #fff; color: var(--ink); }
-  input:focus, select:focus { outline: 2px solid var(--blue); outline-offset: 0; border-color: var(--blue); }
-  .modes { display: flex; gap: 8px; margin: 14px 0; flex-wrap: wrap; }
-  .modes button { flex: 1 1 200px; padding: 9px 12px; font-size: .9rem; border: 1px solid var(--blue);
-    background: #fff; color: var(--blue); border-radius: 6px; cursor: pointer; font-weight: 600; }
-  .modes button.active { background: var(--blue); color: #fff; }
-  .card { background: #fff; border: 1px solid var(--line); border-left: 4px solid var(--blue);
-    border-radius: 6px; padding: 12px 14px; margin-top: 16px; }
-  .card h2 { margin: 0 0 8px; font-size: .95rem; color: var(--blue-dark); }
-  table { width: 100%; border-collapse: collapse; font-size: .92rem; }
-  th, td { text-align: left; padding: 6px 4px; border-bottom: 1px solid #e6ecf2; }
-  th { color: var(--blue-dark); font-weight: 600; }
-  tr:last-child td { border-bottom: none; }
-  td.num { text-align: right; font-variant-numeric: tabular-nums; }
-  .err { color: #b3261e; font-size: .9rem; margin-top: 12px; }
-  .note { font-size: .78rem; color: #52606d; margin-top: 12px; }
+/* Layout: rounded light-blue shell holding a blue header card, then two full-width white cards (belt inputs, then live result). Fixed light theme, white and blue only, matching the motor spacer calculator. */
+:root {
+  --white: #ffffff;
+  --blue: #0075c9;
+  --blue-deep: #005a9c;
+  --blue-soft: #8cc2ea;
+  --blue-50: #f3f8fd;
+  --blue-100: #e3f0fa;
+  --line: #dce8f2;
+  --shell: #eef5fc;
+  --shell-line: #d3e6f6;
+  --ink: #0f2a40;
+  --ink-soft: #5a7288;
+  --alert: #b3261e;
+  --alert-bg: #fdeeed;
+  --font: "Roboto", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { background: var(--white); color: var(--ink); font-family: var(--font); font-size: 15px; line-height: 1.5; font-variant-numeric: tabular-nums; }
+.shell { display: grid; gap: 12px; max-width: 960px; margin: 12px auto; padding: 14px; background: var(--shell); border: 1px solid var(--shell-line); border-radius: 28px; }
+.banner { position: relative; background: var(--blue); color: var(--white); padding: 28px 20px; text-align: center; border-radius: 24px; }
+.banner h1 { margin: 0; font-size: clamp(24px, 4.5vw, 32px); font-weight: 700; letter-spacing: -0.01em; text-wrap: balance; }
+.banner p { margin: 6px auto 0; font-size: 15px; opacity: 0.9; max-width: 56ch; text-wrap: balance; }
+.ver { position: absolute; top: 10px; right: 18px; font-size: 11px; line-height: 1.3; text-align: right; opacity: 0.85; }
+main { display: grid; gap: 12px; }
+section { min-width: 0; }
+.card { background: var(--white); border: 1px solid var(--line); border-radius: 24px; box-shadow: 0 1px 2px rgba(0, 90, 156, 0.06), 0 8px 24px rgba(0, 90, 156, 0.08); padding: 28px; display: grid; gap: 20px; }
+.card h2 { margin: 0; font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--blue); }
+
+.fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 12px; }
+.fld { display: grid; gap: 6px; align-content: start; min-width: 0; }
+.fld > label, .fld > .lbl { font-weight: 500; }
+.unit-field { display: flex; align-items: center; background: var(--blue-50); border: 1.5px solid var(--line); border-radius: 10px; padding-right: 12px; }
+.unit-field:focus-within { border-color: var(--blue); background: var(--white); }
+.field { width: 100%; min-width: 0; border: 0; background: transparent; font: 500 18px var(--font); color: var(--ink); padding: 10px 6px 10px 12px; outline: none; font-variant-numeric: tabular-nums; }
+.field::-webkit-outer-spin-button, .field::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.field { -moz-appearance: textfield; appearance: textfield; }
+.unit-field span { color: var(--ink-soft); font-weight: 500; }
+.select { width: 100%; background: var(--blue-50); border: 1.5px solid var(--line); border-radius: 10px; font: 500 18px var(--font); color: var(--ink); padding: 10px 12px; outline: none; }
+.select:focus { border-color: var(--blue); background: var(--white); }
+.hint { font-size: 13px; color: var(--ink-soft); }
+.fld-row[hidden] { display: none; }
+.sub-grp { margin-left: 8px; }
+.fld-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-start; gap: 8px 16px; }
+.card-sub { display: grid; gap: 14px; }
+.card-sub[hidden], .fld[hidden] { display: none; }
+.fld-row .lbl { font-weight: 500; }
+.toggle { position: relative; display: inline-flex; gap: 6px; }
+.toggle input { position: absolute; opacity: 0; pointer-events: none; }
+.toggle label { display: inline-flex; align-items: center; padding: 8px 18px; border: 1.5px solid var(--line); border-radius: 10px; background: var(--blue-50); cursor: pointer; font-weight: 500; }
+.toggle input:checked + label { border-color: var(--blue); background: var(--blue-100); color: var(--blue-deep); }
+.toggle input:focus-visible + label { outline: 3px solid var(--blue-soft); outline-offset: 2px; }
+.btn { display: inline-flex; align-items: center; padding: 10px 18px; border-radius: 10px; background: var(--blue); color: var(--white); font-weight: 500; text-decoration: none; }
+.btn:hover { background: var(--blue-deep); }
+.btn { border: 0; font: 500 15px var(--font); cursor: pointer; justify-content: center; width: 100%; margin-top: 10px; }
+#addAll { margin-top: 0; }
+.btn:focus-visible { outline: 3px solid var(--blue-soft); outline-offset: 2px; }
+.unit-field .mini { position: relative; display: inline-flex; gap: 2px; padding: 2px; background: var(--blue-100); border-radius: 8px; }
+.mini input { position: absolute; opacity: 0; pointer-events: none; }
+.mini label { padding: 3px 10px; border-radius: 6px; font-size: 13px; font-weight: 500; color: var(--ink-soft); cursor: pointer; }
+.mini input:checked + label { background: var(--blue); color: var(--white); }
+.mini input:focus-visible + label { outline: 3px solid var(--blue-soft); outline-offset: 1px; }
+.csv { width: 100%; border: 1.5px solid var(--line); border-radius: 10px; background: var(--blue-50); font: 13px/1.4 ui-monospace, Menlo, Consolas, monospace; color: var(--ink); padding: 10px; resize: vertical; }
+.card-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.slist { list-style: none; margin: 0; padding: 0 6px 0 0; max-height: 270px; overflow-y: auto; }
+.srow { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-top: 1px solid var(--line); }
+.srow:first-child { border-top: 0; }
+.srow .meta { flex: 1; min-width: 0; }
+.srow .meta strong { display: block; font-size: 16px; }
+.srow .meta span { font-size: 13px; color: var(--ink-soft); }
+.qty { display: inline-flex; align-items: center; gap: 4px; background: var(--blue-50); border: 1.5px solid var(--line); border-radius: 10px; padding: 2px; }
+.qty button { width: 30px; height: 30px; border: 0; background: transparent; color: var(--blue-deep); font: 500 18px var(--font); cursor: pointer; border-radius: 8px; }
+.qty button:hover { background: var(--blue-100); }
+.qty span { min-width: 22px; text-align: center; font-weight: 500; }
+.rm { border: 0; background: none; color: var(--ink-soft); text-decoration: underline; cursor: pointer; font: 400 13px var(--font); }
+.sub-h { margin: 0; font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-soft); }
+
+.seg-group { position: relative; display: grid; gap: 6px; }
+.seg-group.c3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.seg-group.c2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.seg-group input { position: absolute; opacity: 0; pointer-events: none; }
+.seg-group label { display: grid; gap: 2px; padding: 8px 12px; border: 1.5px solid var(--line); border-radius: 10px; background: var(--blue-50); cursor: pointer; font-weight: 500; }
+.seg-group label small { font-weight: 400; font-size: 12px; color: var(--ink-soft); }
+.seg-group input:checked + label { border-color: var(--blue); background: var(--blue-100); color: var(--blue-deep); }
+.seg-group input:focus-visible + label, .select:focus-visible { outline: 3px solid var(--blue-soft); outline-offset: 2px; }
+
+.hero { background: var(--blue); color: var(--white); border-radius: 12px; padding: 16px 18px; display: grid; gap: 2px; }
+.hero .lab { font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; opacity: 0.85; }
+.hero .big { font-size: 34px; font-weight: 700; line-height: 1.1; letter-spacing: -0.01em; }
+.hero .sub { font-size: 14px; opacity: 0.92; }
+.hero.bad { background: var(--alert-bg); color: var(--alert); }
+.hero.bad .sub { opacity: 1; }
+
+.tiles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.tile { border: 1px solid var(--blue-100); background: var(--blue-50); border-radius: 12px; padding: 12px 8px; text-align: center; }
+.tile .count { font-size: 24px; font-weight: 700; line-height: 1.15; color: var(--blue); }
+.tile .size { font-size: 13px; font-weight: 500; color: var(--ink-soft); }
+.tile.hl { background: var(--blue-100); border-color: var(--blue-soft); }
+.tile .pn { font-size: 12px; font-weight: 500; color: var(--blue-deep); margin-top: 2px; white-space: nowrap; }
+
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+td { padding: 8px 0; border-top: 1px solid var(--line); }
+tr:first-child td { border-top: 0; }
+td.num { text-align: right; white-space: nowrap; color: var(--ink-soft); padding-left: 12px; }
+tr.head td { border-top: 1.5px solid var(--blue); font-weight: 700; color: var(--blue-deep); }
+.note { font-size: 13px; color: var(--ink-soft); margin: 0; }
+@media (max-width: 520px) { .shell { margin: 8px; padding: 10px; border-radius: 22px; } .card { padding: 20px; } .banner { border-radius: 18px; } .tiles { grid-template-columns: minmax(0, 1fr); } }
+@media (prefers-reduced-motion: no-preference) { .unit-field, .seg-group label, .toggle label { transition: background 0.15s ease, border-color 0.15s ease; } }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <header>
-    <span class="ver">v7<br><span id="dbg"></span></span>
-    <h1>Belt Calculator</h1>
-    <p>Belt length and center distance for a two-pulley belt drive</p>
-  </header>
 
-  <div class="grid">
-    <div>
-      <label for="belt">Belt profile</label>
-      <select id="belt">
-        <option value="3">GT2 (3 mm pitch)</option>
-        <option value="5" selected>HTD 5M (5 mm pitch)</option>
-        <option value="8">HTD 8M (8 mm pitch)</option>
-      </select>
-    </div>
-    <div>
-      <label for="t1">Pulley 1 teeth</label>
-      <input id="t1" type="number" min="6" step="1" value="18">
-    </div>
-    <div>
-      <label for="t2">Pulley 2 teeth</label>
-      <input id="t2" type="number" min="6" step="1" value="36">
-    </div>
-  </div>
+<div class="shell">
+<header class="banner">
+  <span class="ver">v1.7.3</span>
+  <h1>Belt Calculator</h1>
+  <p>Belt length and center distance for a two-pulley belt drive</p>
+</header>
 
-  <div class="modes">
-    <button id="m1" class="active" type="button">I know the center distance</button>
-    <button id="m2" type="button">I know the belt tooth count</button>
-  </div>
+<main>
+  <section aria-labelledby="in-h">
+    <div class="card">
+      <h2 id="in-h">Belt drive</h2>
 
-  <div class="grid">
-    <div id="cdBox">
-      <label for="cd">Center distance</label>
-      <input id="cd" type="number" min="0" step="any" value="100">
-    </div>
-    <div id="unitBox">
-      <label for="unit">Distance units</label>
-      <select id="unit">
-        <option value="mm" selected>mm</option>
-        <option value="in">inches</option>
-      </select>
-    </div>
-    <div id="beltBox" style="display:none">
-      <label for="bt">Belt teeth</label>
-      <input id="bt" type="number" min="1" step="1" value="90">
-    </div>
-  </div>
+      <div class="fld-row">
+        <span class="lbl">Belt profile</span>
+        <div class="toggle" role="radiogroup" aria-label="Belt profile">
+          <input type="radio" name="belt" id="b3" value="3"><label for="b3">GT2</label>
+          <input type="radio" name="belt" id="b5" value="5" checked><label for="b5">HTD 5M</label>
+        </div>
+        <div class="fld-row sub-grp" id="widthRow" hidden>
+          <span class="lbl">Width</span>
+          <div class="toggle" role="radiogroup" aria-label="Belt width">
+            <input type="radio" name="width" id="w9" value="9" checked><label for="w9">9 mm</label>
+            <input type="radio" name="width" id="w15" value="15"><label for="w15">15 mm</label>
+          </div>
+        </div>
+      </div>
 
-  <div id="err" class="err"></div>
-  <div id="out"></div>
+      <div class="fields">
+        <div class="fld">
+          <label for="t1">Pulley 1</label>
+          <span class="unit-field"><input class="field" id="t1" type="number" inputmode="numeric" step="1" min="6" value="18"><span>Teeth</span></span>
+        </div>
+        <div class="fld">
+          <label for="t2">Pulley 2</label>
+          <span class="unit-field"><input class="field" id="t2" type="number" inputmode="numeric" step="1" min="6" value="36"><span>Teeth</span></span>
+        </div>
+      </div>
 
-  <p class="note">Uses the exact open-belt length formula with pitch diameters (teeth &times; pitch &divide; &pi;).
-    Real builds usually need a little slack or a tensioner, and belt tooth counts are only sold in certain sizes, so check what is available.</p>
+      <div class="fld">
+        <span class="lbl">Known Value</span>
+        <div class="seg-group c2" role="radiogroup" aria-label="Known value">
+          <input type="radio" name="mode" id="m1" value="1" checked><label for="m1">Center Distance</label>
+          <input type="radio" name="mode" id="m2" value="2"><label for="m2">Belt Tooth Count</label>
+        </div>
+      </div>
+
+      <div id="cdFields" class="card-sub">
+        <div class="fields">
+          <div class="fld">
+            <label for="cd">Desired center</label>
+            <span class="unit-field"><input class="field" id="cd" type="number" inputmode="decimal" step="any" min="0" value="4"><span class="mini" role="radiogroup" aria-label="Units"><input type="radio" name="unit" id="u-in" value="in" checked><label for="u-in">in</label><input type="radio" name="unit" id="u-mm" value="mm"><label for="u-mm">mm</label></span></span>
+          </div>
+          <div class="fld">
+            <label for="ex">Extra center</label>
+            <span class="unit-field"><input class="field" id="ex" type="number" inputmode="decimal" step="any" min="0" value="0"><span class="usfx">in</span></span>
+          </div>
+        </div>
+        <span class="hint">Extra center is added to the desired center before the belt is sized, for slack or a tensioning range.</span>
+      </div>
+
+      <div class="fld" id="btFields" hidden>
+        <label for="bt">Belt teeth</label>
+        <span class="unit-field"><input class="field" id="bt" type="number" inputmode="numeric" step="1" min="1" value="90"><span>Teeth</span></span>
+        <span class="hint">Enter the tooth count of the belt you have.</span>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="out-h">
+    <div class="card">
+      <h2 id="out-h">Result</h2>
+      <div class="hero" id="status" aria-live="polite"></div>
+      <div class="tiles" id="tiles"></div>
+      <div class="table-wrap"><table><tbody id="rows"></tbody></table></div>
+      <div class="card-sub" id="opts" hidden>
+        <h3 class="sub-h">WCP belt options</h3>
+        <div class="tiles" id="optTiles"></div>
+      </div>
+      <p class="note">Uses the exact open-belt length formula with pitch diameters (teeth &times; pitch &divide; &pi;). Real builds usually need a little slack or a tensioner, and the belt options are limited to the single-sided GT2 and HTD belts WCP sells.</p>
+    </div>
+  </section>
+
+  <section aria-labelledby="sv-h" id="savedSec" hidden>
+    <div class="card">
+      <div class="card-head"><h2 id="sv-h">Saved belts</h2><button type="button" class="rm" id="clearAll">Clear all</button></div>
+      <ul class="slist" id="savedList"></ul>
+      <button type="button" class="btn" id="addAll">Download quick order file</button>
+      <span class="hint" id="cartMsg" aria-live="polite" hidden></span>
+      <div class="card-sub" id="csvBox" hidden>
+        <span class="hint">If the download did not start, copy this into a .csv file:</span>
+        <textarea id="csvText" class="csv" readonly rows="4"></textarea>
+      </div>
+    </div>
+  </section>
+</main>
 </div>
 
 <script>
 (function () {
   var $ = function (id) { return document.getElementById(id); };
-  var mode = 1;
+  function radio(name) { var e = document.querySelector('input[name="' + name + '"]:checked'); return e ? e.value : null; }
+  function esc(t) { return String(t).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/"/g, "&quot;"); }
+  // Belt tooth counts WCP sells (single-sided belts), read from the wcproducts.com HTD 9mm, HTD 15mm and GT2 product pages on 2026-10-06.
+  var SIZES = {
+    "3": [45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 105, 110, 115, 120, 125, 130, 140, 150, 160, 170, 180, 190, 200],
+    "5": [30, 35, 40, 41, 43, 44, 45, 47, 50, 53, 55, 60, 64, 65, 70, 75, 80, 85, 90, 95, 100, 104, 105, 110, 115, 120, 125, 130, 135, 140, 145, 150, 155, 160, 165, 170, 175, 180, 185, 190, 195, 200, 210, 220, 225, 230, 240, 250, 260, 270, 280, 290, 300]
+  };
+  // WCP part numbers (SKUs) for each belt, read from the wcproducts.com 9mm HTD belt
+  // options on 2026-10-06. HTD 15mm was read the same day. GT2 was read the same day (all 9mm wide). Tooth count: SKU.
+  // The quick order file is built from these.
+  var SKU = {
+    "5": { "9": {"30": "WCP-0160", "35": "WCP-0612", "40": "WCP-0613", "41": "WCP-2707", "43": "WCP-0511", "44": "WCP-2433", "45": "WCP-0162", "47": "WCP-2708", "50": "WCP-0615", "53": "WCP-0512", "55": "WCP-0164", "60": "WCP-0617", "64": "WCP-1757", "65": "WCP-0618", "70": "WCP-0619", "75": "WCP-0620", "80": "WCP-0621", "85": "WCP-0622", "90": "WCP-0623", "95": "WCP-0624", "100": "WCP-0625", "104": "WCP-0626", "105": "WCP-0627", "110": "WCP-0628", "115": "WCP-0629", "120": "WCP-0630", "125": "WCP-0631", "130": "WCP-0632", "135": "WCP-0633", "140": "WCP-0634", "145": "WCP-0635", "150": "WCP-0636", "155": "WCP-1758", "160": "WCP-0637", "165": "WCP-1759", "170": "WCP-0638", "175": "WCP-1760", "180": "WCP-0639", "185": "WCP-1761", "190": "WCP-0640", "195": "WCP-1762", "200": "WCP-0641", "210": "WCP-1763", "220": "WCP-1764", "225": "WCP-0642", "230": "WCP-1765", "240": "WCP-1766", "250": "WCP-0643", "260": "WCP-1767", "270": "WCP-1768", "280": "WCP-1769", "290": "WCP-1770", "300": "WCP-1771"}, "15": {"30": "WCP-0161", "35": "WCP-0525", "40": "WCP-0526", "44": "WCP-2434", "45": "WCP-0163", "50": "WCP-0527", "55": "WCP-0165", "60": "WCP-0644", "64": "WCP-1779", "65": "WCP-0528", "70": "WCP-0645", "75": "WCP-0529", "80": "WCP-0646", "85": "WCP-0530", "90": "WCP-0647", "95": "WCP-0531", "100": "WCP-0648", "104": "WCP-0649", "105": "WCP-0532", "110": "WCP-0650", "115": "WCP-0533", "120": "WCP-0651", "125": "WCP-0534", "130": "WCP-0652", "135": "WCP-0535", "140": "WCP-0653", "145": "WCP-0536", "150": "WCP-0654", "155": "WCP-1780", "160": "WCP-0655", "165": "WCP-1781", "170": "WCP-0656", "175": "WCP-1782", "180": "WCP-0657", "185": "WCP-1783", "190": "WCP-0537", "195": "WCP-1784", "200": "WCP-0658", "210": "WCP-1785", "220": "WCP-1786", "225": "WCP-0659", "230": "WCP-1787", "240": "WCP-1788", "250": "WCP-0660", "260": "WCP-1789", "270": "WCP-1790", "280": "WCP-1791", "290": "WCP-1792", "300": "WCP-1793"} },
+    "3": { "": {"45": "WCP-0666", "50": "WCP-0667", "55": "WCP-0668", "60": "WCP-0669", "65": "WCP-1046", "70": "WCP-0670", "75": "WCP-1047", "80": "WCP-1048", "85": "WCP-0671", "90": "WCP-0672", "95": "WCP-1049", "100": "WCP-0673", "105": "WCP-0674", "110": "WCP-0675", "115": "WCP-1050", "120": "WCP-0676", "125": "WCP-0677", "130": "WCP-1051", "140": "WCP-0678", "150": "WCP-1052", "160": "WCP-1053", "170": "WCP-1054", "180": "WCP-0679", "190": "WCP-1055", "200": "WCP-1056"} }
+  };
+  // Saved belts live in memory only, so they reset when the page reloads.
+  var saved = [];
+  function beltName(it) { return (it.pitch === 3 ? "GT2" : "HTD 5M") + (it.pitch === 5 ? " | " + it.width + " mm wide" : ""); }
+  // Label each Save belt button "Saved" only while that belt is in the saved list.
+  function markSaved() {
+    var p = parseFloat(radio("belt")), w = p === 5 ? radio("width") : "";
+    Array.prototype.forEach.call(document.querySelectorAll(".save"), function (b) {
+      var t = parseInt(b.getAttribute("data-teeth"), 10);
+      var on = saved.some(function (it) { return it.pitch === p && it.width === w && it.teeth === t; });
+      b.textContent = on ? "Saved \u2713" : "Save belt";
+    });
+  }
+  function renderSaved() {
+    markSaved();
+    $("savedSec").hidden = saved.length === 0;
+    $("cartMsg").hidden = true;
+    $("csvBox").hidden = true;
+    $("savedList").innerHTML = saved.map(function (it, i) {
+      return '<li class="srow" data-i="' + i + '"><div class="meta"><strong>' + it.teeth + ' teeth</strong><span>' + esc(beltName(it)) + '</span></div>' +
+        '<div class="qty"><button type="button" data-act="dec" aria-label="Fewer">&minus;</button><span>' + it.qty + '</span><button type="button" data-act="inc" aria-label="More">+</button></div>' +
+        '<button type="button" class="rm" data-act="rm">Remove</button></li>';
+    }).join("");
+  }
+  function saveBelt(pitch, width, teeth) {
+    var w = pitch === 5 ? width : "";
+    var hit = saved.filter(function (it) { return it.pitch === pitch && it.width === w && it.teeth === teeth; })[0];
+    if (hit) hit.qty++; else saved.push({ pitch: pitch, width: w, teeth: teeth, qty: 1 });
+    renderSaved();
+  }
+  function skuFor(it) { return ((SKU[String(it.pitch)] || {})[it.width] || {})[it.teeth] || null; }
+  function downloadOrder() {
+    var msg = $("cartMsg"), box = $("csvBox");
+    var ok = saved.filter(skuFor), skipped = saved.length - ok.length;
+    msg.hidden = false;
+    if (!ok.length) {
+      box.hidden = true;
+      msg.textContent = "The part numbers for these belts are not set up yet.";
+      return;
+    }
+    var csv = '"SKU","QTY"\r\n' + ok.map(function (it) { return '"' + skuFor(it) + '","' + it.qty + '"'; }).join("\r\n") + "\r\n";
+    try {
+      var a = document.createElement("a");
+      a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv" }));
+      a.download = "wcp-belt-order.csv";
+      document.body.appendChild(a); a.click(); a.remove();
+    } catch (err) {}
+    $("csvText").value = csv;
+    box.hidden = false;
+    msg.textContent = "Upload wcp-belt-order.csv on the WCP quick order page." + (skipped ? " " + skipped + " saved belt" + (skipped === 1 ? " was" : "s were") + " left out because its part number is not set up yet." : "");
+  }
+  // Sizes WCP sells for this belt: the SKU table when it has entries (the HTD widths
+  // differ), otherwise the general list above.
+  function sizesFor(pitch) {
+    var t = (SKU[String(pitch)] || {})[pitch === 5 ? radio("width") : ""] || {};
+    var ks = Object.keys(t).map(Number).sort(function (a, b) { return a - b; });
+    return ks.length ? ks : SIZES[String(pitch)];
+  }
+  function f(x, n) { return x.toFixed(n); }
+  function inch(x) { return x / 25.4; }
+  function both(mm) { return f(inch(mm), 3) + " in (" + f(mm, 2) + " mm)"; }
 
   function beltLen(C, D1, D2) {
     var d = Math.abs(D2 - D1);
@@ -115,7 +302,7 @@
     return 2 * C * Math.cos(phi) + Math.PI * (D1 + D2) / 2 + phi * d;
   }
 
-  // Returns center distance for a belt length, or null if the belt is too short.
+  // Center distance for a belt length, or null if the belt is too short.
   function centerFor(L, D1, D2) {
     var d = Math.abs(D2 - D1);
     var lo = d / 2 + 1e-9;
@@ -129,99 +316,133 @@
     return (lo + hi) / 2;
   }
 
-  function f(x, n) { return x.toFixed(n); }
-  function mmToIn(x) { return x / 25.4; }
-
-  function row(label, mm) {
-    return '<tr><td>' + label + '</td><td class="num">' + f(mm, 2) + ' mm</td><td class="num">' + f(mmToIn(mm), 3) + ' in</td></tr>';
+  function setStatus(bad, big, sub, label) {
+    var el = $("status");
+    el.className = "hero" + (bad ? " bad" : "");
+    el.innerHTML = (label ? '<div class="lab">' + esc(label) + "</div>" : "") + '<div class="big">' + esc(big) + '</div><div class="sub">' + esc(sub) + "</div>";
   }
+  function tile(value, label, sub, hl, extra) {
+    return '<div class="tile' + (hl ? " hl" : "") + '"><div class="count">' + esc(value) + '</div><div class="size">' + esc(label) + '</div><div class="pn">' + esc(sub) + "</div>" + (extra || "") + "</div>";
+  }
+  function row(label, text) { return "<tr><td>" + esc(label) + '</td><td class="num">' + esc(text) + "</td></tr>"; }
 
   function calc() {
-    var pitch = parseFloat($('belt').value);
-    var t1 = parseInt($('t1').value, 10);
-    var t2 = parseInt($('t2').value, 10);
-    var err = $('err'), out = $('out');
-    err.textContent = ''; out.innerHTML = '';
+    var mode = radio("mode") === "2" ? 2 : 1;
+    $("cdFields").hidden = mode !== 1;
+    $("btFields").hidden = mode !== 2;
 
-    if (!(t1 > 0) || !(t2 > 0)) { err.textContent = 'Enter a tooth count for both pulleys.'; return; }
+    var pitch = parseFloat(radio("belt"));
+    $("widthRow").hidden = pitch !== 5;
+    var unit = radio("unit") === "mm" ? "mm" : "in";
+    var toMM = function (v) { return unit === "in" ? v * 25.4 : v; };
+    $("opts").hidden = true;
+    var t1 = parseInt($("t1").value, 10), t2 = parseInt($("t2").value, 10);
 
-    var D1 = t1 * pitch / Math.PI;
-    var D2 = t2 * pitch / Math.PI;
-    var html = '<div class="card"><h2>Pulleys</h2><table>' +
-      row('Pulley 1 pitch diameter', D1) + row('Pulley 2 pitch diameter', D2) + '</table></div>';
+    function bad(msg) {
+      setStatus(true, "Check inputs", msg);
+      $("tiles").innerHTML = ""; $("rows").innerHTML = ""; $("rows").closest(".table-wrap").hidden = true; $("opts").hidden = true;
+    }
+    if (!(t1 > 0) || !(t2 > 0)) { bad("Enter a tooth count for both pulleys."); return; }
+
+    var D1 = t1 * pitch / Math.PI, D2 = t2 * pitch / Math.PI;
+    var rows = "", tiles = "";
+    var ratio = t2 >= t1 ? t2 / t1 : t1 / t2;
+    var ratioTile = tile(f(ratio, 2) + " : 1", "Ratio", t2 > t1 ? "speed reduction" : t2 < t1 ? "speed increase" : "1 to 1");
 
     if (mode === 1) {
-      var c = parseFloat($('cd').value);
-      if (!(c > 0)) { err.textContent = 'Enter a center distance greater than 0.'; return; }
-      var cmm = $('unit').value === 'in' ? c * 25.4 : c;
-      if (cmm <= Math.abs(D2 - D1) / 2) { err.textContent = 'Center distance is too small for these pulleys. The belt cannot wrap them.'; return; }
-      var L = beltLen(cmm, D1, D2);
-      var teeth = L / pitch;
-      var lo = Math.floor(teeth), hi = Math.ceil(teeth);
-      html += '<div class="card"><h2>Belt for this center distance</h2><table>' +
-        row('Belt pitch length', L) +
-        '<tr><td>Belt teeth (exact)</td><td class="num" colspan="2">' + f(teeth, 2) + '</td></tr></table></div>';
-      html += '<div class="card"><h2>Nearest whole belt sizes</h2><table>' +
-        '<tr><th>Belt teeth</th><th class="num">Center distance</th><th class="num"></th></tr>';
-      [lo, hi].forEach(function (n, i) {
-        if (i === 1 && hi === lo) return;
-        var cc = centerFor(n * pitch, D1, D2);
-        html += '<tr><td>' + n + '</td>' + (cc === null
-          ? '<td class="num" colspan="2">too short</td>'
-          : '<td class="num">' + f(cc, 2) + ' mm</td><td class="num">' + f(mmToIn(cc), 3) + ' in</td>') + '</tr>';
-      });
-      html += '</table></div>';
+      var c = parseFloat($("cd").value);
+      if (!(c > 0)) { bad("Enter a center distance greater than 0."); return; }
+      var ex = parseFloat($("ex").value); if (!(ex > 0)) ex = 0;
+      var cmm = toMM(c + ex);
+      if (cmm <= Math.abs(D2 - D1) / 2) { bad("Center distance is too small for these pulleys. The belt cannot wrap them."); return; }
+      var L = beltLen(cmm, D1, D2), teeth = L / pitch;
+      setStatus(false, f(inch(L), 3) + " in", f(L, 2) + " mm  |  " + f(teeth, 2) + " teeth (exact)", "Belt length needed");
+      tiles = tile(f(inch(D1), 3) + " in", "Pulley 1", "Pitch Diameter " + f(D1, 2) + " mm") +
+              tile(f(inch(D2), 3) + " in", "Pulley 2", "Pitch Diameter " + f(D2, 2) + " mm") +
+              ratioTile;
+      if (ex > 0) rows += row("Center distance used", both(cmm) + " (desired + extra)");
+
+      var list = sizesFor(pitch), ci = 0;
+      list.forEach(function (n, i) { if (Math.abs(n - teeth) <= Math.abs(list[ci] - teeth)) ci = i; });
+      var opt = function (i, label, hl) {
+        if (i < 0 || i >= list.length) return tile("None", label, "no WCP size", hl);
+        var n = list[i], cc = centerFor(n * pitch, D1, D2);
+        var btn = cc === null ? "" : '<button type="button" class="btn save" data-teeth="' + n + '">Save belt</button>';
+        return tile(n + " teeth", label, cc === null ? "too short for these pulleys" : "center " + f(inch(cc), 3) + " in (" + f(cc, 2) + " mm)", hl, btn);
+      };
+      $("optTiles").innerHTML = opt(ci - 1, "Shorter belt") + opt(ci, "Closest belt", true) + opt(ci + 1, "Longer belt");
+      $("opts").hidden = false;
+      markSaved();
     } else {
-      var n = parseInt($('bt').value, 10);
-      if (!(n > 0)) { err.textContent = 'Enter the belt tooth count.'; return; }
-      var cc2 = centerFor(n * pitch, D1, D2);
-      if (cc2 === null) { err.textContent = 'This belt is too short to wrap both pulleys.'; return; }
-      html += '<div class="card"><h2>Result</h2><table>' +
-        row('Belt pitch length', n * pitch) + row('Center distance', cc2) + '</table></div>';
+      var n2 = parseInt($("bt").value, 10);
+      if (!(n2 > 0)) { bad("Enter the belt tooth count."); return; }
+      var cc2 = centerFor(n2 * pitch, D1, D2);
+      if (cc2 === null) { bad("This belt is too short to wrap both pulleys."); return; }
+      setStatus(false, f(inch(cc2), 3) + " in", f(cc2, 2) + " mm  |  with a " + n2 + " tooth belt", "Center distance");
+      tiles = tile(f(inch(D1), 3) + " in", "Pulley 1", "Pitch Diameter " + f(D1, 2) + " mm") +
+              tile(f(inch(D2), 3) + " in", "Pulley 2", "Pitch Diameter " + f(D2, 2) + " mm") +
+              ratioTile;
+      rows += row("Belt pitch length", both(n2 * pitch));
+      var list = sizesFor(pitch);
+      if (list.indexOf(n2) !== -1) {
+        rows += row("WCP sells this size", "yes");
+      } else {
+        var b = null, a = null;
+        list.forEach(function (n) { if (n < n2) b = n; if (n > n2 && a === null) a = n; });
+        rows += row("WCP sells this size", "no, nearest are " + [b, a].filter(function (x) { return x !== null; }).join(" and ") + " teeth");
+      }
     }
-    out.innerHTML = html;
+    $("tiles").innerHTML = tiles;
+    $("rows").innerHTML = rows;
+    $("rows").closest(".table-wrap").hidden = !rows;
   }
 
-  function setMode(m) {
-    mode = m;
-    $('m1').className = m === 1 ? 'active' : '';
-    $('m2').className = m === 2 ? 'active' : '';
-    $('cdBox').style.display = m === 1 ? '' : 'none';
-    $('unitBox').style.display = m === 1 ? '' : 'none';
-    $('beltBox').style.display = m === 2 ? '' : 'none';
+  ["t1", "t2", "cd", "bt"].forEach(function (id) { $(id).addEventListener("input", calc); });
+  var lastUnit = "in";
+  function onUnit() {
+    var u = radio("unit") === "mm" ? "mm" : "in";
+    if (u !== lastUnit) {
+      ["cd", "ex"].forEach(function (id) {
+        var v = parseFloat($(id).value);
+        if (v > 0) $(id).value = +(u === "mm" ? v * 25.4 : v / 25.4).toFixed(u === "mm" ? 2 : 3);
+      });
+      lastUnit = u;
+    }
+    Array.prototype.forEach.call(document.querySelectorAll(".usfx"), function (e) { e.textContent = u; });
     calc();
   }
-
-  $('m1').addEventListener('click', function () { setMode(1); });
-  $('m2').addEventListener('click', function () { setMode(2); });
-  ['belt', 't1', 't2', 'cd', 'unit', 'bt'].forEach(function (id) {
-    $(id).addEventListener('input', calc);
-    $(id).addEventListener('change', calc);
+  ["u-in", "u-mm"].forEach(function (id) { $(id).addEventListener("change", onUnit); });
+  ["ex"].forEach(function (id) { $(id).addEventListener("input", calc); });
+  ["b3", "b5", "m1", "m2", "w9", "w15"].forEach(function (id) { $(id).addEventListener("change", calc); });
+  $("optTiles").addEventListener("click", function (e) {
+    var b = e.target.closest ? e.target.closest(".save") : null;
+    if (!b) return;
+    saveBelt(parseFloat(radio("belt")), radio("width"), parseInt(b.getAttribute("data-teeth"), 10));
   });
+  $("savedList").addEventListener("click", function (e) {
+    var b = e.target.closest ? e.target.closest("[data-act]") : null;
+    if (!b) return;
+    var i = parseInt(b.closest("li").getAttribute("data-i"), 10), act = b.getAttribute("data-act");
+    if (act === "rm" || (act === "dec" && saved[i].qty <= 1)) saved.splice(i, 1);
+    else saved[i].qty += act === "inc" ? 1 : -1;
+    renderSaved();
+  });
+  $("addAll").addEventListener("click", downloadOrder);
+  $("clearAll").addEventListener("click", function () { saved = []; renderSaved(); });
   calc();
 })();
 
-// GitBook frame sizing: tells the GitBook block how big this page is.
-// If the author picked a fixed shape in the editor, that ratio wins.
+// GitBook frame sizing. GitBook currently ignores this message, so the block
+// sets the frame shape itself (see AUTO_RATIO in src/index.tsx).
 (function () {
   var fixedRatio = null;
   function sendHeight() {
-    // Measure the content itself, not the page. The page height is never
-    // smaller than the frame, so measuring it would stop the frame shrinking.
-    var wrap = document.querySelector('.wrap');
     var w = document.documentElement.clientWidth;
-    var h = Math.ceil(wrap.getBoundingClientRect().height) + 2;
+    var h = Math.ceil(document.body.getBoundingClientRect().height) + 2;
     var ratio = fixedRatio || (w / h);
-    // Keep the normal scrollbar as a backup in case the frame is a little short.
-    document.documentElement.style.overflow = '';
     var msg = { action: '@webframe.resize', aspectRatio: ratio };
-    // Auto mode: also state the exact content height, in case GitBook applies
-    // a default height cap when none is given.
     if (!fixedRatio) msg.maxHeight = h;
     window.parent.postMessage({ action: msg }, '*');
-    // Debug readout (top right): what this page measured and sent.
-    var d = document.getElementById('dbg');
-    if (d) d.textContent = 'w' + w + ' h' + h + ' r' + ratio.toFixed(2) + (fixedRatio ? ' fixed' : ' auto');
   }
   window.addEventListener('message', function (event) {
     var r = parseFloat(event.data && event.data.state && event.data.state.ratio);
