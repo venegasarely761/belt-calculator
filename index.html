@@ -73,7 +73,9 @@ main > section:first-child .fld { gap: 4px; }
 .mini input:checked + label { background: var(--blue); color: var(--white); }
 .mini input:focus-visible + label { outline: 3px solid var(--blue-soft); outline-offset: 1px; }
 .card-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-.slist { list-style: none; margin: 0; padding: 0 6px 0 0; max-height: 270px; overflow-y: auto; }
+.slist { list-style: none; margin: 0; padding: 0 6px 0 0; height: 200px; overflow-y: auto; }
+.slist .empty { height: 100%; display: flex; align-items: center; justify-content: center; text-align: center; color: var(--ink-soft); font-size: 13px; padding: 0 12px; }
+.btn.off { opacity: 0.45; pointer-events: none; }
 .srow { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-top: 1px solid var(--line); }
 .srow:first-child { border-top: 0; }
 .srow .meta { flex: 1; min-width: 0; }
@@ -133,7 +135,7 @@ tr.head td { border-top: 1.5px solid var(--blue); font-weight: 700; color: var(-
 
 <div class="shell">
 <header class="banner">
-  <span class="ver">v1.8.16</span>
+  <span class="ver">v1.8.17</span>
   <h1>Belt Calculator</h1>
   <p>Belt length and center distance for a two-pulley belt drive</p>
 </header>
@@ -213,7 +215,7 @@ tr.head td { border-top: 1.5px solid var(--blue); font-weight: 700; color: var(-
     </div>
   </section>
 
-  <section aria-labelledby="sv-h" id="savedSec" hidden>
+  <section aria-labelledby="sv-h" id="savedSec">
     <div class="card">
       <div class="card-head"><h2 id="sv-h">Saved belts</h2><button type="button" class="rm" id="clearAll">Clear All</button></div>
       <ul class="slist" id="savedList"></ul>
@@ -262,8 +264,11 @@ tr.head td { border-top: 1.5px solid var(--blue); font-weight: 700; color: var(-
   }
   function renderSaved() {
     markSaved();
-    $("savedSec").hidden = saved.length === 0;
     $("addAll").href = cartLink();
+    $("addAll").classList.toggle("off", saved.length === 0);
+    $("addAll").setAttribute("aria-disabled", saved.length === 0 ? "true" : "false");
+    $("clearAll").style.visibility = saved.length ? "visible" : "hidden";
+    if (!saved.length) { $("savedList").innerHTML = '<li class="empty">No belts saved yet. Use Save Belt on a belt option above.</li>'; return; }
     $("savedList").innerHTML = saved.map(function (it, i) {
       return '<li class="srow" data-i="' + i + '"><div class="meta"><strong>' + esc(beltTitle(it)) + '</strong><span>' + esc(beltName(it)) + '</span></div>' +
         '<div class="qty"><button type="button" data-act="dec" aria-label="Fewer">&minus;</button><span>' + it.qty + '</span><button type="button" data-act="inc" aria-label="More">+</button></div>' +
@@ -434,6 +439,7 @@ tr.head td { border-top: 1.5px solid var(--blue); font-weight: 700; color: var(-
     renderSaved();
   });
   $("clearAll").addEventListener("click", function () { saved = []; renderSaved(); });
+  renderSaved();
   calc();
 })();
 
