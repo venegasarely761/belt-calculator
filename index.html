@@ -35,7 +35,7 @@ body { background: var(--white); color: var(--ink); font-family: var(--font); fo
 main { display: grid; gap: 8px; }
 section { min-width: 0; }
 .card { background: var(--white); border: 1px solid var(--line); border-radius: 16px; box-shadow: 0 1px 2px rgba(0, 90, 156, 0.06), 0 8px 24px rgba(0, 90, 156, 0.08); padding: 20px; display: grid; gap: 18px; }
-.card h2 { margin: 0; font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--blue); }
+.card h2 { margin: 0; line-height: 1; font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--blue); }
 
 .fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 12px; }
 .fld { display: grid; gap: 6px; align-content: start; min-width: 0; }
@@ -72,6 +72,7 @@ main > section:first-child .fld { gap: 4px; }
 .mini label { padding: 3px 9px; border-radius: 6px; font-size: 12px; font-weight: 500; color: var(--ink-soft); cursor: pointer; }
 .mini input:checked + label { background: var(--blue); color: var(--white); }
 .mini input:focus-visible + label { outline: 3px solid var(--blue-soft); outline-offset: 1px; }
+.card-head .rm { line-height: 1; padding: 0; }
 .card-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .slist { list-style: none; margin: 0; padding: 0 6px 0 0; height: 200px; overflow-y: auto; }
 .slist .empty { height: 100%; display: flex; align-items: center; justify-content: center; text-align: center; color: var(--ink-soft); font-size: 13px; padding: 0 12px; }
@@ -135,7 +136,7 @@ tr.head td { border-top: 1.5px solid var(--blue); font-weight: 700; color: var(-
 
 <div class="shell">
 <header class="banner">
-  <span class="ver">v1.8.17</span>
+  <span class="ver">v1.8.27</span>
   <h1>Belt Calculator</h1>
   <p>Belt length and center distance for a two-pulley belt drive</p>
 </header>
@@ -211,7 +212,6 @@ tr.head td { border-top: 1.5px solid var(--blue); font-weight: 700; color: var(-
         <h3 class="sub-h">WCP belt options</h3>
         <div class="tiles" id="optTiles"></div>
       </div>
-      <p class="note">Uses the exact open-belt length formula with pitch diameters (teeth &times; pitch &divide; &pi;). Real builds usually need a little slack or a tensioner, and the belt options are limited to the single-sided GT2 and HTD belts WCP sells.</p>
     </div>
   </section>
 
@@ -305,7 +305,8 @@ tr.head td { border-top: 1.5px solid var(--blue); font-weight: 700; color: var(-
   }
   function f(x, n) { return x.toFixed(n); }
   function inch(x) { return x / 25.4; }
-  function both(mm) { return f(inch(mm), 3) + " in (" + f(mm, 2) + " mm)"; }
+  // One length in whichever unit the in / mm switch is set to.
+  function both(mm) { return radio("unit") === "mm" ? f(mm, 2) + " mm" : f(inch(mm), 3) + " in"; }
 
   function beltLen(C, D1, D2) {
     var d = Math.abs(D2 - D1);
@@ -330,10 +331,10 @@ tr.head td { border-top: 1.5px solid var(--blue); font-weight: 700; color: var(-
   function setStatus(bad, big, sub, label) {
     var el = $("status");
     el.className = "hero" + (bad ? " bad" : "");
-    el.innerHTML = (label ? '<div class="lab">' + esc(label) + "</div>" : "") + '<div class="big">' + esc(big) + '</div><div class="sub">' + esc(sub) + "</div>";
+    el.innerHTML = (label ? '<div class="lab">' + esc(label) + "</div>" : "") + '<div class="big">' + esc(big) + "</div>" + (sub ? '<div class="sub">' + esc(sub) + "</div>" : "");
   }
   function tile(value, label, sub, hl, extra) {
-    return '<div class="tile' + (hl ? " hl" : "") + '"><div class="count">' + esc(value) + '</div><div class="size">' + esc(label) + '</div><div class="pn">' + esc(sub) + "</div>" + (extra || "") + "</div>";
+    return '<div class="tile' + (hl ? " hl" : "") + '"><div class="count">' + esc(value) + '</div><div class="size">' + esc(label) + '</div>' + (sub ? '<div class="pn">' + esc(sub) + "</div>" : "") + (extra || "") + "</div>";
   }
   function row(label, text) { return "<tr><td>" + esc(label) + '</td><td class="num">' + esc(text) + "</td></tr>"; }
 
@@ -358,7 +359,7 @@ tr.head td { border-top: 1.5px solid var(--blue); font-weight: 700; color: var(-
     var D1 = t1 * pitch / Math.PI, D2 = t2 * pitch / Math.PI;
     var rows = "", tiles = "";
     var ratio = t2 >= t1 ? t2 / t1 : t1 / t2;
-    var ratioTile = tile(f(ratio, 2) + " : 1", "Ratio", t2 > t1 ? "Speed Reduction" : t2 < t1 ? "Speed Increase" : "1 to 1");
+    var ratioTile = tile(f(ratio, 2) + " : 1", "Ratio", "");
 
     if (mode === 1) {
       var c = parseFloat($("cd").value);
@@ -367,9 +368,9 @@ tr.head td { border-top: 1.5px solid var(--blue); font-weight: 700; color: var(-
       var cmm = toMM(c + ex);
       if (cmm <= Math.abs(D2 - D1) / 2) { bad("Center distance is too small for these pulleys. The belt cannot wrap them."); return; }
       var L = beltLen(cmm, D1, D2), teeth = L / pitch;
-      setStatus(false, f(inch(L), 3) + " in", f(L, 2) + " mm", "Belt Pitch Length");
-      tiles = tile(f(inch(D1), 3) + " in", "Pulley 1", "Pitch Diameter " + f(D1, 2) + " mm") +
-              tile(f(inch(D2), 3) + " in", "Pulley 2", "Pitch Diameter " + f(D2, 2) + " mm") +
+      setStatus(false, both(L), "", "Belt Pitch Length");
+      tiles = tile(both(D1), "Pulley 1 Pitch Diameter", "") +
+              tile(both(D2), "Pulley 2 Pitch Diameter", "") +
               ratioTile;
       if (ex > 0) rows += row("Center Distance Used", both(cmm) + " (desired + extra)");
 
@@ -379,7 +380,7 @@ tr.head td { border-top: 1.5px solid var(--blue); font-weight: 700; color: var(-
         if (i < 0 || i >= list.length) return tile("None", label, "no WCP size", hl);
         var n = list[i], cc = centerFor(n * pitch, D1, D2);
         var btn = cc === null ? "" : '<button type="button" class="btn save" data-teeth="' + n + '">Save Belt</button>';
-        return tile(n + " Teeth", label, cc === null ? "too short for these pulleys" : "Center " + f(inch(cc), 3) + " in (" + f(cc, 2) + " mm)", hl, btn);
+        return tile(n + " Teeth", label, cc === null ? "too short for these pulleys" : "Center " + both(cc), hl, btn);
       };
       $("optTiles").innerHTML = opt(ci - 1, "Shorter Belt") + opt(ci, "Closest Belt", true) + opt(ci + 1, "Longer Belt");
       $("opts").hidden = false;
@@ -389,9 +390,9 @@ tr.head td { border-top: 1.5px solid var(--blue); font-weight: 700; color: var(-
       if (!(n2 > 0)) { bad("Enter the belt tooth count."); return; }
       var cc2 = centerFor(n2 * pitch, D1, D2);
       if (cc2 === null) { bad("This belt is too short to wrap both pulleys."); return; }
-      setStatus(false, f(inch(cc2), 3) + " in", f(cc2, 2) + " mm", "Center Distance");
-      tiles = tile(f(inch(D1), 3) + " in", "Pulley 1", "Pitch Diameter " + f(D1, 2) + " mm") +
-              tile(f(inch(D2), 3) + " in", "Pulley 2", "Pitch Diameter " + f(D2, 2) + " mm") +
+      setStatus(false, both(cc2), "", "Center Distance");
+      tiles = tile(both(D1), "Pulley 1 Pitch Diameter", "") +
+              tile(both(D2), "Pulley 2 Pitch Diameter", "") +
               ratioTile;
       rows += row("Belt Pitch Length", both(n2 * pitch));
       var list = sizesFor(pitch);
