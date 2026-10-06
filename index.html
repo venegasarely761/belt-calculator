@@ -133,7 +133,7 @@ tr.head td { border-top: 1.5px solid var(--blue); font-weight: 700; color: var(-
 
 <div class="shell">
 <header class="banner">
-  <span class="ver">v1.8.13</span>
+  <span class="ver">v1.8.16</span>
   <h1>Belt Calculator</h1>
   <p>Belt length and center distance for a two-pulley belt drive</p>
 </header>
@@ -147,7 +147,7 @@ tr.head td { border-top: 1.5px solid var(--blue); font-weight: 700; color: var(-
         <span class="lbl">Belt profile</span>
         <div class="toggle" role="radiogroup" aria-label="Belt profile">
           <input type="radio" name="belt" id="b3" value="3"><label for="b3">GT2</label>
-          <input type="radio" name="belt" id="b5" value="5" checked><label for="b5">HTD 5M</label>
+          <input type="radio" name="belt" id="b5" value="5" checked><label for="b5">HTD 5MM</label>
         </div>
         <div class="fld-row sub-grp" id="widthRow" hidden>
           <span class="lbl">Width</span>
@@ -245,7 +245,12 @@ tr.head td { border-top: 1.5px solid var(--blue); font-weight: 700; color: var(-
   var CART_URL = "https://wcproducts.com/cart/add";
   // Saved belts live in memory only, so they reset when the page reloads.
   var saved = [];
-  function beltName(it) { return (it.pitch === 3 ? "GT2" : "HTD 5M") + (it.pitch === 5 ? " | " + it.width + " mm wide" : ""); }
+  // "70T x 15mm Wide (WCP-0165)"; WCP's GT2 belts are 9 mm wide.
+  function beltTitle(it) {
+    var b = belt(it.pitch, it.width, it.teeth);
+    return it.teeth + "T x " + (it.pitch === 5 ? it.width : "9") + "mm Wide" + (b ? " (" + b[0] + ")" : "");
+  }
+  function beltName(it) { return (it.pitch === 3 ? "GT2" : "HTD 5MM"); }
   // Label each Save belt button "Saved" only while that belt is in the saved list.
   function markSaved() {
     var p = parseFloat(radio("belt")), w = p === 5 ? radio("width") : "";
@@ -260,7 +265,7 @@ tr.head td { border-top: 1.5px solid var(--blue); font-weight: 700; color: var(-
     $("savedSec").hidden = saved.length === 0;
     $("addAll").href = cartLink();
     $("savedList").innerHTML = saved.map(function (it, i) {
-      return '<li class="srow" data-i="' + i + '"><div class="meta"><strong>' + it.teeth + ' Teeth</strong><span>' + esc(beltName(it)) + '</span></div>' +
+      return '<li class="srow" data-i="' + i + '"><div class="meta"><strong>' + esc(beltTitle(it)) + '</strong><span>' + esc(beltName(it)) + '</span></div>' +
         '<div class="qty"><button type="button" data-act="dec" aria-label="Fewer">&minus;</button><span>' + it.qty + '</span><button type="button" data-act="inc" aria-label="More">+</button></div>' +
         '<button type="button" class="rm" data-act="rm">Remove</button></li>';
     }).join("");
@@ -269,8 +274,6 @@ tr.head td { border-top: 1.5px solid var(--blue); font-weight: 700; color: var(-
     var w = pitch === 5 ? width : "";
     var hit = saved.filter(function (it) { return it.pitch === pitch && it.width === w && it.teeth === teeth; })[0];
     if (hit) hit.qty++; else saved.push({ pitch: pitch, width: w, teeth: teeth, qty: 1 });
-    // smallest belt to largest
-    saved.sort(function (a, b) { return a.teeth - b.teeth || a.pitch - b.pitch || String(a.width).localeCompare(String(b.width)); });
     renderSaved();
   }
   function belt(pitch, width, teeth) { return ((BELTS[String(pitch)] || {})[pitch === 5 ? width : ""] || {})[teeth] || null; }
