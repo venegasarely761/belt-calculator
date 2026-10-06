@@ -27,14 +27,14 @@
 * { box-sizing: border-box; }
 html, body { margin: 0; }
 body { background: var(--white); color: var(--ink); font-family: var(--font); font-size: 15px; line-height: 1.5; font-variant-numeric: tabular-nums; }
-.shell { display: grid; gap: 12px; max-width: 960px; margin: 12px auto; padding: 14px; background: var(--shell); border: 1px solid var(--shell-line); border-radius: 28px; }
-.banner { position: relative; background: var(--blue); color: var(--white); padding: 28px 20px; text-align: center; border-radius: 24px; }
-.banner h1 { margin: 0; font-size: clamp(24px, 4.5vw, 32px); font-weight: 700; letter-spacing: -0.01em; text-wrap: balance; }
-.banner p { margin: 6px auto 0; font-size: 15px; opacity: 0.9; max-width: 56ch; text-wrap: balance; }
-.ver { position: absolute; top: 10px; right: 18px; font-size: 11px; line-height: 1.3; text-align: right; opacity: 0.85; }
-main { display: grid; gap: 12px; }
+.shell { display: grid; gap: 8px; width: min(960px, calc(100% - 24px)); margin: 12px auto; padding: 10px; background: #e8f2fa; border: 1px solid #cfe3f3; border-radius: 22px; }
+.banner { position: relative; background: var(--blue); color: var(--white); padding: 11px 16px; text-align: center; border-radius: 16px; }
+.banner h1 { margin: 0; font-size: 24px; font-weight: 700; letter-spacing: -0.01em; text-wrap: balance; }
+.banner p { margin: 1px auto 0; font-size: 13px; opacity: 0.9; max-width: 56ch; text-wrap: balance; }
+.ver { position: absolute; top: 8px; right: 16px; font-size: 11px; font-weight: 500; color: var(--white); opacity: 0.85; }
+main { display: grid; gap: 8px; }
 section { min-width: 0; }
-.card { background: var(--white); border: 1px solid var(--line); border-radius: 24px; box-shadow: 0 1px 2px rgba(0, 90, 156, 0.06), 0 8px 24px rgba(0, 90, 156, 0.08); padding: 28px; display: grid; gap: 20px; }
+.card { background: var(--white); border: 1px solid var(--line); border-radius: 16px; box-shadow: 0 1px 2px rgba(0, 90, 156, 0.06), 0 8px 24px rgba(0, 90, 156, 0.08); padding: 20px; display: grid; gap: 18px; }
 .card h2 { margin: 0; font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--blue); }
 
 .fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px 12px; }
@@ -63,14 +63,13 @@ section { min-width: 0; }
 .btn { display: inline-flex; align-items: center; padding: 10px 18px; border-radius: 10px; background: var(--blue); color: var(--white); font-weight: 500; text-decoration: none; }
 .btn:hover { background: var(--blue-deep); }
 .btn { border: 0; font: 500 15px var(--font); cursor: pointer; justify-content: center; width: 100%; margin-top: 10px; }
-#addAll { margin-top: 0; }
+#addAll { margin-top: 0; text-decoration: none; }
 .btn:focus-visible { outline: 3px solid var(--blue-soft); outline-offset: 2px; }
 .unit-field .mini { position: relative; display: inline-flex; gap: 2px; padding: 2px; background: var(--blue-100); border-radius: 8px; }
 .mini input { position: absolute; opacity: 0; pointer-events: none; }
 .mini label { padding: 3px 10px; border-radius: 6px; font-size: 13px; font-weight: 500; color: var(--ink-soft); cursor: pointer; }
 .mini input:checked + label { background: var(--blue); color: var(--white); }
 .mini input:focus-visible + label { outline: 3px solid var(--blue-soft); outline-offset: 1px; }
-.csv { width: 100%; border: 1.5px solid var(--line); border-radius: 10px; background: var(--blue-50); font: 13px/1.4 ui-monospace, Menlo, Consolas, monospace; color: var(--ink); padding: 10px; resize: vertical; }
 .card-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .slist { list-style: none; margin: 0; padding: 0 6px 0 0; max-height: 270px; overflow-y: auto; }
 .srow { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-top: 1px solid var(--line); }
@@ -115,7 +114,16 @@ tr:first-child td { border-top: 0; }
 td.num { text-align: right; white-space: nowrap; color: var(--ink-soft); padding-left: 12px; }
 tr.head td { border-top: 1.5px solid var(--blue); font-weight: 700; color: var(--blue-deep); }
 .note { font-size: 13px; color: var(--ink-soft); margin: 0; }
-@media (max-width: 520px) { .shell { margin: 8px; padding: 10px; border-radius: 22px; } .card { padding: 20px; } .banner { border-radius: 18px; } .tiles { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 520px) {
+  .shell { width: calc(100% - 12px); margin: 6px auto; padding: 6px; border-radius: 18px; gap: 6px; }
+  .banner { padding: 15px 12px 9px; border-radius: 14px; }
+  .banner h1 { font-size: 19px; }
+  .banner p { font-size: 12px; }
+  .ver { top: 3px; right: 10px; font-size: 10px; }
+  main { gap: 6px; }
+  .card { padding: 12px; gap: 12px; border-radius: 14px; }
+  .tiles { grid-template-columns: minmax(0, 1fr); }
+}
 @media (prefers-reduced-motion: no-preference) { .unit-field, .seg-group label, .toggle label { transition: background 0.15s ease, border-color 0.15s ease; } }
 </style>
 </head>
@@ -123,7 +131,7 @@ tr.head td { border-top: 1.5px solid var(--blue); font-weight: 700; color: var(-
 
 <div class="shell">
 <header class="banner">
-  <span class="ver">v1.7.3</span>
+  <span class="ver">v1.8.0</span>
   <h1>Belt Calculator</h1>
   <p>Belt length and center distance for a two-pulley belt drive</p>
 </header>
@@ -207,12 +215,8 @@ tr.head td { border-top: 1.5px solid var(--blue); font-weight: 700; color: var(-
     <div class="card">
       <div class="card-head"><h2 id="sv-h">Saved belts</h2><button type="button" class="rm" id="clearAll">Clear all</button></div>
       <ul class="slist" id="savedList"></ul>
-      <button type="button" class="btn" id="addAll">Download quick order file</button>
-      <span class="hint" id="cartMsg" aria-live="polite" hidden></span>
-      <div class="card-sub" id="csvBox" hidden>
-        <span class="hint">If the download did not start, copy this into a .csv file:</span>
-        <textarea id="csvText" class="csv" readonly rows="4"></textarea>
-      </div>
+      <a class="btn" id="addAll" href="https://wcproducts.com/cart/" target="_blank" rel="noopener">Add To Cart</a>
+      <span class="hint">Opens wcproducts.com in a new tab with every saved belt in your cart.</span>
     </div>
   </section>
 </main>
@@ -228,13 +232,15 @@ tr.head td { border-top: 1.5px solid var(--blue); font-weight: 700; color: var(-
     "3": [45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 105, 110, 115, 120, 125, 130, 140, 150, 160, 170, 180, 190, 200],
     "5": [30, 35, 40, 41, 43, 44, 45, 47, 50, 53, 55, 60, 64, 65, 70, 75, 80, 85, 90, 95, 100, 104, 105, 110, 115, 120, 125, 130, 135, 140, 145, 150, 155, 160, 165, 170, 175, 180, 185, 190, 195, 200, 210, 220, 225, 230, 240, 250, 260, 270, 280, 290, 300]
   };
-  // WCP part numbers (SKUs) for each belt, read from the wcproducts.com 9mm HTD belt
-  // options on 2026-10-06. HTD 15mm was read the same day. GT2 was read the same day (all 9mm wide). Tooth count: SKU.
-  // The quick order file is built from these.
-  var SKU = {
-    "5": { "9": {"30": "WCP-0160", "35": "WCP-0612", "40": "WCP-0613", "41": "WCP-2707", "43": "WCP-0511", "44": "WCP-2433", "45": "WCP-0162", "47": "WCP-2708", "50": "WCP-0615", "53": "WCP-0512", "55": "WCP-0164", "60": "WCP-0617", "64": "WCP-1757", "65": "WCP-0618", "70": "WCP-0619", "75": "WCP-0620", "80": "WCP-0621", "85": "WCP-0622", "90": "WCP-0623", "95": "WCP-0624", "100": "WCP-0625", "104": "WCP-0626", "105": "WCP-0627", "110": "WCP-0628", "115": "WCP-0629", "120": "WCP-0630", "125": "WCP-0631", "130": "WCP-0632", "135": "WCP-0633", "140": "WCP-0634", "145": "WCP-0635", "150": "WCP-0636", "155": "WCP-1758", "160": "WCP-0637", "165": "WCP-1759", "170": "WCP-0638", "175": "WCP-1760", "180": "WCP-0639", "185": "WCP-1761", "190": "WCP-0640", "195": "WCP-1762", "200": "WCP-0641", "210": "WCP-1763", "220": "WCP-1764", "225": "WCP-0642", "230": "WCP-1765", "240": "WCP-1766", "250": "WCP-0643", "260": "WCP-1767", "270": "WCP-1768", "280": "WCP-1769", "290": "WCP-1770", "300": "WCP-1771"}, "15": {"30": "WCP-0161", "35": "WCP-0525", "40": "WCP-0526", "44": "WCP-2434", "45": "WCP-0163", "50": "WCP-0527", "55": "WCP-0165", "60": "WCP-0644", "64": "WCP-1779", "65": "WCP-0528", "70": "WCP-0645", "75": "WCP-0529", "80": "WCP-0646", "85": "WCP-0530", "90": "WCP-0647", "95": "WCP-0531", "100": "WCP-0648", "104": "WCP-0649", "105": "WCP-0532", "110": "WCP-0650", "115": "WCP-0533", "120": "WCP-0651", "125": "WCP-0534", "130": "WCP-0652", "135": "WCP-0535", "140": "WCP-0653", "145": "WCP-0536", "150": "WCP-0654", "155": "WCP-1780", "160": "WCP-0655", "165": "WCP-1781", "170": "WCP-0656", "175": "WCP-1782", "180": "WCP-0657", "185": "WCP-1783", "190": "WCP-0537", "195": "WCP-1784", "200": "WCP-0658", "210": "WCP-1785", "220": "WCP-1786", "225": "WCP-0659", "230": "WCP-1787", "240": "WCP-1788", "250": "WCP-0660", "260": "WCP-1789", "270": "WCP-1790", "280": "WCP-1791", "290": "WCP-1792", "300": "WCP-1793"} },
-    "3": { "": {"45": "WCP-0666", "50": "WCP-0667", "55": "WCP-0668", "60": "WCP-0669", "65": "WCP-1046", "70": "WCP-0670", "75": "WCP-1047", "80": "WCP-1048", "85": "WCP-0671", "90": "WCP-0672", "95": "WCP-1049", "100": "WCP-0673", "105": "WCP-0674", "110": "WCP-0675", "115": "WCP-1050", "120": "WCP-0676", "125": "WCP-0677", "130": "WCP-1051", "140": "WCP-0678", "150": "WCP-1052", "160": "WCP-1053", "170": "WCP-1054", "180": "WCP-0679", "190": "WCP-1055", "200": "WCP-1056"} }
+  // WCP belts by tooth count: [part number, Shopify variant id]. Read from the wcproducts.com
+  // belt options and cart data on 2026-10-06. Each belt size is its own product, so the cart
+  // link below can add it directly.
+  var BELTS = {
+    "5": { "9": {"30":["WCP-0160",35666728321184],"35":["WCP-0612",42165181055188],"40":["WCP-0613",42165182136532],"41":["WCP-2707",48398539063508],"43":["WCP-0511",43331106472148],"44":["WCP-2433",47403593334996],"45":["WCP-0162",35666728419488],"47":["WCP-2708",48398539096276],"50":["WCP-0615",42165182660820],"53":["WCP-0512",43331112796372],"55":["WCP-0164",35666728616096],"60":["WCP-0617",35666655445152],"64":["WCP-1757",45898412425428],"65":["WCP-0618",42165185708244],"70":["WCP-0619",35666671173792],"75":["WCP-0620",42165186298068],"80":["WCP-0621",35666671206560],"85":["WCP-0622",42165187084500],"90":["WCP-0623",35666671304864],"95":["WCP-0624",42165187150036],"100":["WCP-0625",35666671763616],"104":["WCP-0626",35666672156832],"105":["WCP-0627",42165187281108],"110":["WCP-0628",35666672222368],"115":["WCP-0629",42165189509332],"120":["WCP-0630",35666672255136],"125":["WCP-0631",42165193670868],"130":["WCP-0632",35666672353440],"135":["WCP-0633",42165313536212],"140":["WCP-0634",35666672386208],"145":["WCP-0635",42165317435604],"150":["WCP-0636",35666672648352],"155":["WCP-1758",45898413506772],"160":["WCP-0637",35666672746656],"165":["WCP-1759",45898414620884],"170":["WCP-0638",35666672976032],"175":["WCP-1760",45898415145172],"180":["WCP-0639",35666673500320],"185":["WCP-1761",45898416029908],"190":["WCP-0640",42165318942932],"195":["WCP-1762",45898416521428],"200":["WCP-0641",35666673828000],"210":["WCP-1763",45898417602772],"220":["WCP-1764",45898418585812],"225":["WCP-0642",35666674090144],"230":["WCP-1765",45898425172180],"240":["WCP-1766",45898427760852],"250":["WCP-0643",35666674614432],"260":["WCP-1767",45898431365332],"270":["WCP-1768",45898438934740],"280":["WCP-1769",45898440605908],"290":["WCP-1770",45898441523412],"300":["WCP-1771",45898459185364]},
+           "15": {"30":["WCP-0161",35666728386720],"35":["WCP-0525",43330960720084],"40":["WCP-0526",43330962751700],"44":["WCP-2434",47403597267156],"45":["WCP-0163",35666728550560],"50":["WCP-0527",43330963898580],"55":["WCP-0165",35666728681632],"60":["WCP-0644",35666655510688],"64":["WCP-1779",45898567385300],"65":["WCP-0528",43330971631828],"70":["WCP-0645",35666674679968],"75":["WCP-0529",43330977726676],"80":["WCP-0646",35666674712736],"85":["WCP-0530",43330999025876],"90":["WCP-0647",35666675007648],"95":["WCP-0531",43331000107220],"100":["WCP-0648",35666675269792],"104":["WCP-0649",35666676318368],"105":["WCP-0532",43331005219028],"110":["WCP-0650",35666676908192],"115":["WCP-0533",43331006070996],"120":["WCP-0651",35666676940960],"125":["WCP-0534",43331006300372],"130":["WCP-0652",35666677006496],"135":["WCP-0535",43331088351444],"140":["WCP-0653",35666677498016],"145":["WCP-0536",43331089957076],"150":["WCP-0654",35666677596320],"155":["WCP-1780",45898568302804],"160":["WCP-0655",35666677629088],"165":["WCP-1781",45898569973972],"170":["WCP-0656",35666677825696],"175":["WCP-1782",45898570432724],"180":["WCP-0657",35666678481056],"185":["WCP-1783",45898571481300],"190":["WCP-0537",43331090907348],"195":["WCP-1784",45898582032596],"200":["WCP-0658",35666678579360],"210":["WCP-1785",45898587930836],"220":["WCP-1786",45898588553428],"225":["WCP-0659",35666678644896],"230":["WCP-1787",45898590847188],"240":["WCP-1788",45898613129428],"250":["WCP-0660",35666679136416],"260":["WCP-1789",45898618667220],"270":["WCP-1790",45898620076244],"280":["WCP-1791",45898621223124],"290":["WCP-1792",45898633117908],"300":["WCP-1793",45898679812308]} },
+    "3": { "": {"45":["WCP-0666",35666704531616],"50":["WCP-0667",35666704892064],"55":["WCP-0668",35666704990368],"60":["WCP-0669",35666705023136],"65":["WCP-1046",42165156020436],"70":["WCP-0670",35666705055904],"75":["WCP-1047",42165169619156],"80":["WCP-1048",42165173027028],"85":["WCP-0671",35666705121440],"90":["WCP-0672",35666705154208],"95":["WCP-1049",42165173453012],"100":["WCP-0673",35666705186976],"105":["WCP-0674",35666705219744],"110":["WCP-0675",35666705285280],"115":["WCP-1050",35666709151904],"120":["WCP-0676",35666705318048],"125":["WCP-0677",35666705383584],"130":["WCP-1051",42165174927572],"140":["WCP-0678",35666705416352],"150":["WCP-1052",42165175025876],"160":["WCP-1053",42165175910612],"170":["WCP-1054",42165177712852],"180":["WCP-0679",35666705449120],"190":["WCP-1055",42165178040532],"200":["WCP-1056",42165178532052]} }
   };
+  var CART_URL = "https://wcproducts.com/cart/";
   // Saved belts live in memory only, so they reset when the page reloads.
   var saved = [];
   function beltName(it) { return (it.pitch === 3 ? "GT2" : "HTD 5M") + (it.pitch === 5 ? " | " + it.width + " mm wide" : ""); }
@@ -250,8 +256,7 @@ tr.head td { border-top: 1.5px solid var(--blue); font-weight: 700; color: var(-
   function renderSaved() {
     markSaved();
     $("savedSec").hidden = saved.length === 0;
-    $("cartMsg").hidden = true;
-    $("csvBox").hidden = true;
+    $("addAll").href = cartLink();
     $("savedList").innerHTML = saved.map(function (it, i) {
       return '<li class="srow" data-i="' + i + '"><div class="meta"><strong>' + it.teeth + ' teeth</strong><span>' + esc(beltName(it)) + '</span></div>' +
         '<div class="qty"><button type="button" data-act="dec" aria-label="Fewer">&minus;</button><span>' + it.qty + '</span><button type="button" data-act="inc" aria-label="More">+</button></div>' +
@@ -264,31 +269,20 @@ tr.head td { border-top: 1.5px solid var(--blue); font-weight: 700; color: var(-
     if (hit) hit.qty++; else saved.push({ pitch: pitch, width: w, teeth: teeth, qty: 1 });
     renderSaved();
   }
-  function skuFor(it) { return ((SKU[String(it.pitch)] || {})[it.width] || {})[it.teeth] || null; }
-  function downloadOrder() {
-    var msg = $("cartMsg"), box = $("csvBox");
-    var ok = saved.filter(skuFor), skipped = saved.length - ok.length;
-    msg.hidden = false;
-    if (!ok.length) {
-      box.hidden = true;
-      msg.textContent = "The part numbers for these belts are not set up yet.";
-      return;
-    }
-    var csv = '"SKU","QTY"\r\n' + ok.map(function (it) { return '"' + skuFor(it) + '","' + it.qty + '"'; }).join("\r\n") + "\r\n";
-    try {
-      var a = document.createElement("a");
-      a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv" }));
-      a.download = "wcp-belt-order.csv";
-      document.body.appendChild(a); a.click(); a.remove();
-    } catch (err) {}
-    $("csvText").value = csv;
-    box.hidden = false;
-    msg.textContent = "Upload wcp-belt-order.csv on the WCP quick order page." + (skipped ? " " + skipped + " saved belt" + (skipped === 1 ? " was" : "s were") + " left out because its part number is not set up yet." : "");
+  function belt(pitch, width, teeth) { return ((BELTS[String(pitch)] || {})[pitch === 5 ? width : ""] || {})[teeth] || null; }
+  // https://wcproducts.com/cart/<variant id>:<quantity>,<variant id>:<quantity>
+  function cartLink() {
+    var parts = [];
+    saved.forEach(function (it) {
+      var b = belt(it.pitch, it.width, it.teeth);
+      if (b) parts.push(b[1] + ":" + it.qty);
+    });
+    return CART_URL + parts.join(",");
   }
-  // Sizes WCP sells for this belt: the SKU table when it has entries (the HTD widths
+  // Sizes WCP sells for this belt: the BELTS table when it has entries (the HTD widths
   // differ), otherwise the general list above.
   function sizesFor(pitch) {
-    var t = (SKU[String(pitch)] || {})[pitch === 5 ? radio("width") : ""] || {};
+    var t = (BELTS[String(pitch)] || {})[pitch === 5 ? radio("width") : ""] || {};
     var ks = Object.keys(t).map(Number).sort(function (a, b) { return a - b; });
     return ks.length ? ks : SIZES[String(pitch)];
   }
@@ -427,7 +421,6 @@ tr.head td { border-top: 1.5px solid var(--blue); font-weight: 700; color: var(-
     else saved[i].qty += act === "inc" ? 1 : -1;
     renderSaved();
   });
-  $("addAll").addEventListener("click", downloadOrder);
   $("clearAll").addEventListener("click", function () { saved = []; renderSaved(); });
   calc();
 })();
