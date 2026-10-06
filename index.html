@@ -22,11 +22,12 @@
   --alert: #b3261e;
   --alert-bg: #fdeeed;
   --font: "Roboto", system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
-  color-scheme: light;
+  /* Lets the page follow the viewer's theme so the browser does not paint a white backdrop behind it in dark mode. */
+  color-scheme: light dark;
 }
 * { box-sizing: border-box; }
-html, body { margin: 0; }
-body { background: var(--white); color: var(--ink); font-family: var(--font); font-size: 15px; line-height: 1.5; font-variant-numeric: tabular-nums; }
+html, body { margin: 0; background: transparent; }
+body { background: transparent; color: var(--ink); font-family: var(--font); font-size: 15px; line-height: 1.5; font-variant-numeric: tabular-nums; }
 .shell { display: grid; gap: 8px; width: min(960px, calc(100% - 24px)); margin: 12px auto; padding: 10px; background: #e8f2fa; border: 1px solid #cfe3f3; border-radius: 22px; }
 .banner { position: relative; background: var(--blue); color: var(--white); padding: 11px 16px; text-align: center; border-radius: 16px; }
 .banner h1 { margin: 0; font-size: 24px; font-weight: 700; letter-spacing: -0.01em; text-wrap: balance; }
@@ -136,7 +137,7 @@ tr.head td { border-top: 1.5px solid var(--blue); font-weight: 700; color: var(-
 
 <div class="shell">
 <header class="banner">
-  <span class="ver">v1.8.27</span>
+  <span class="ver">v1.8.28</span>
   <h1>Belt Calculator</h1>
   <p>Belt length and center distance for a two-pulley belt drive</p>
 </header>
