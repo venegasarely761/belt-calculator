@@ -52,15 +52,23 @@ section { min-width: 0; }
 .hint { font-size: 13px; color: var(--ink-soft); }
 .fld-row[hidden] { display: none; }
 .sub-grp { margin-left: 8px; }
+.idl-d { width: 150px; }
+.idl-d .pre { padding-left: 12px; }
+.idl-d .field { padding-left: 8px; }
+.idl-d[hidden], .toggle[hidden] { display: none; }
+.idl-w { width: 190px; }
+.idl-d select.field { background: transparent; border: 0; font: inherit; color: inherit; outline: none; padding: 8px 4px; width: 100%; cursor: pointer; }
+.idl-d .deg { padding-left: 2px; }
 .fld-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-start; gap: 8px 16px; }
 .card-sub { display: grid; gap: 10px; }
-main > section:first-child .card { gap: 12px; }
+main > section:first-child .card { gap: 12px; position: relative; }
 main > section:first-child .fld { gap: 4px; }
 .card-sub[hidden], .fld[hidden] { display: none; }
 .fld-row .lbl { font-weight: 500; }
 .toggle { position: relative; display: inline-flex; gap: 6px; }
 .toggle input { position: absolute; opacity: 0; pointer-events: none; }
 .toggle label { display: inline-flex; align-items: center; font-size: 12.5px; padding: 6px 14px; border: 1.5px solid var(--line); border-radius: 10px; background: var(--blue-50); cursor: pointer; font-weight: 500; }
+.toggle input:disabled + label { opacity: 0.4; cursor: not-allowed; }
 .toggle input:checked + label { border-color: var(--blue); background: var(--blue-100); color: var(--blue-deep); }
 .toggle input:focus-visible + label { outline: 3px solid var(--blue-soft); outline-offset: 2px; }
 .btn { display: inline-flex; align-items: center; padding: 10px 18px; border-radius: 10px; background: var(--blue); color: var(--white); font-weight: 500; text-decoration: none; }
@@ -68,8 +76,9 @@ main > section:first-child .fld { gap: 4px; }
 .btn { border: 0; font: 700 15px var(--font); cursor: pointer; justify-content: center; width: 100%; margin-top: 10px; }
 #addAll { margin-top: 0; text-decoration: none; gap: 8px; }
 .btn:focus-visible { outline: 3px solid var(--blue-soft); outline-offset: 2px; }
-.unit-field .mini { position: relative; display: inline-flex; gap: 2px; padding: 2px; background: var(--blue-100); border-radius: 8px; }
+.mini { position: relative; display: inline-flex; gap: 2px; padding: 2px; background: var(--blue-100); border-radius: 8px; }
 .mini input { position: absolute; opacity: 0; pointer-events: none; }
+.unit-sw { position: absolute; top: 14px; right: 20px; }
 .mini label { padding: 3px 9px; border-radius: 6px; font-size: 12px; font-weight: 500; color: var(--ink-soft); cursor: pointer; }
 .mini input:checked + label { background: var(--blue); color: var(--white); }
 .mini input:focus-visible + label { outline: 3px solid var(--blue-soft); outline-offset: 1px; }
@@ -113,13 +122,24 @@ main > section:first-child .fld { gap: 4px; }
 .tile.hl { background: var(--blue-100); border-color: var(--blue-soft); }
 .tile .pn { font-size: 12px; font-weight: 500; color: var(--blue-deep); margin-top: 2px; white-space: nowrap; }
 
+.res-bottom { display: grid; gap: 18px; align-content: start; min-height: 170px; }
+#btFields { min-height: 93px; align-content: start; }
 .table-wrap { overflow-x: auto; }
 table { width: 100%; border-collapse: collapse; font-size: 14px; }
 td { padding: 8px 0; border-top: 1px solid var(--line); }
 tr:first-child td { border-top: 0; }
 td.num { text-align: right; white-space: nowrap; color: var(--ink-soft); padding-left: 12px; }
 tr.head td { border-top: 1.5px solid var(--blue); font-weight: 700; color: var(--blue-deep); }
+a.buy { color: var(--blue-deep); font-weight: 500; }
 .note { font-size: 13px; color: var(--ink-soft); margin: 0; }
+.pill { border: 1.5px solid var(--line); background: var(--blue-50); color: var(--blue-deep); font: 500 12.5px var(--font); padding: 5px 14px; border-radius: 10px; cursor: pointer; }
+.pill:hover { background: var(--blue-100); }
+.pill:focus-visible { outline: 3px solid var(--blue-soft); outline-offset: 2px; }
+.draw-wrap { position: relative; background: var(--blue-50); border: 1px solid var(--blue-100); border-radius: 12px; overflow: hidden; }
+svg.draw { display: block; width: 100%; height: auto; max-width: 100%; }
+svg.draw text { font-family: var(--font); }
+.draw-wrap .empty { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; text-align: center; color: var(--ink-soft); font-size: 13px; padding: 0 12px; }
+.draw-wrap .empty[hidden] { display: none; }
 @media (max-width: 520px) {
   .shell { width: calc(100% - 12px); margin: 6px auto; padding: 6px; border-radius: 18px; gap: 6px; }
   .banner { padding: 15px 12px 9px; border-radius: 14px; }
@@ -137,7 +157,7 @@ tr.head td { border-top: 1.5px solid var(--blue); font-weight: 700; color: var(-
 
 <div class="shell">
 <header class="banner">
-  <span class="ver">v1.8.28</span>
+  <span class="ver">v1.13.2</span>
   <h1>Belt Calculator</h1>
   <p>Belt length and center distance for a two-pulley belt drive</p>
 </header>
@@ -145,6 +165,7 @@ tr.head td { border-top: 1.5px solid var(--blue); font-weight: 700; color: var(-
 <main>
   <section aria-labelledby="in-h">
     <div class="card">
+      <span class="mini unit-sw" role="radiogroup" aria-label="Units"><input type="radio" name="unit" id="u-in" value="in" checked><label for="u-in">in</label><input type="radio" name="unit" id="u-mm" value="mm"><label for="u-mm">mm</label></span>
       <h2 id="in-h">Belt drive</h2>
 
       <div class="fld-row">
@@ -153,7 +174,7 @@ tr.head td { border-top: 1.5px solid var(--blue); font-weight: 700; color: var(-
           <input type="radio" name="belt" id="b3" value="3"><label for="b3">GT2</label>
           <input type="radio" name="belt" id="b5" value="5" checked><label for="b5">HTD 5MM</label>
         </div>
-        <div class="fld-row sub-grp" id="widthRow" hidden>
+        <div class="fld-row sub-grp" id="widthRow">
           <span class="lbl">Width</span>
           <div class="toggle" role="radiogroup" aria-label="Belt width">
             <input type="radio" name="width" id="w9" value="9" checked><label for="w9">9 mm</label>
@@ -185,7 +206,7 @@ tr.head td { border-top: 1.5px solid var(--blue); font-weight: 700; color: var(-
         <div class="fields">
           <div class="fld">
             <label for="cd">Desired Center</label>
-            <span class="unit-field"><input class="field" id="cd" type="number" inputmode="decimal" step="any" min="0" value="4"><span class="mini" role="radiogroup" aria-label="Units"><input type="radio" name="unit" id="u-in" value="in" checked><label for="u-in">in</label><input type="radio" name="unit" id="u-mm" value="mm"><label for="u-mm">mm</label></span></span>
+            <span class="unit-field"><input class="field" id="cd" type="number" inputmode="decimal" step="any" min="0" value="4"><span class="usfx">in</span></span>
           </div>
           <div class="fld">
             <label for="ex">Extra Center</label>
@@ -203,15 +224,66 @@ tr.head td { border-top: 1.5px solid var(--blue); font-weight: 700; color: var(-
     </div>
   </section>
 
+  <section aria-labelledby="dr-h">
+    <div class="card">
+      <div class="card-head"><h2 id="dr-h">Top view</h2><button type="button" class="pill" id="playBtn">Pause</button></div>
+      <div class="fld" id="idlBox">
+        <div class="fld-row">
+          <span class="lbl">Belt idler</span>
+          <div class="toggle" role="radiogroup" aria-label="Belt idler">
+            <input type="radio" name="idl" id="i0" value="0" checked><label for="i0">None</label>
+            <input type="radio" name="idl" id="i1" value="1"><label for="i1">Idler</label>
+          </div>
+        </div>
+        <div class="fld-row" id="idlFields" hidden>
+          <div class="toggle" id="idlType" role="radiogroup" aria-label="Idler type" hidden>
+            <input type="radio" name="itype" id="ty0" value="round" checked><label for="ty0">Round OD</label>
+            <input type="radio" name="itype" id="ty1" value="tooth"><label for="ty1">Toothed pulley</label>
+          </div>
+          <span class="unit-field idl-d" id="idlOD"><span class="pre">OD</span><input class="field" id="iod" type="number" inputmode="decimal" step="any" min="0" value="0.75" aria-label="Idler outside diameter"><span class="usfx">in</span></span>
+          <span class="unit-field idl-d" id="idlTN" hidden><span class="pre">Teeth</span><input class="field" id="itn" type="number" inputmode="numeric" step="1" min="6" value="18" aria-label="Idler teeth"></span>
+          <input type="hidden" id="ix" value="2"><input type="hidden" id="iy" value="1"><input type="hidden" id="irun" value="">
+        </div>
+        <div class="fld-row" id="idlSideRow" hidden>
+          <div class="toggle" id="idlSide" role="radiogroup" aria-label="Idler side" hidden>
+            <input type="radio" name="iside" id="is0" value="in"><label for="is0">Inside belt</label>
+            <input type="radio" name="iside" id="is1" value="out" checked><label for="is1">Outside belt</label>
+          </div>
+        </div>
+        <div class="fld-row" id="idlGoalRow" hidden>
+          <span class="lbl">Goal</span>
+          <div class="toggle" role="radiogroup" aria-label="Idler goal">
+            <input type="radio" name="igoal" id="g0" value="len" checked><label for="g0">Belt length</label>
+            <input type="radio" name="igoal" id="g1" value="wrap"><label for="g1">Wrap angle</label>
+          </div>
+          <span class="unit-field idl-d idl-w" id="idlBeltW"><span class="pre">Belt</span><select class="field" id="ibelt" aria-label="Belt the idler takes up"></select></span>
+          <div class="toggle" id="idlWP" role="radiogroup" aria-label="Pulley for the wrap angle" hidden>
+            <input type="radio" name="iwp" id="wp0" value="1" checked><label for="wp0">Pulley 1</label>
+            <input type="radio" name="iwp" id="wp1" value="2"><label for="wp1">Pulley 2</label>
+          </div>
+          <span class="unit-field idl-d" id="idlWA" hidden><span class="pre">Wrap</span><input class="field" id="iwa" type="number" inputmode="decimal" step="any" min="0" max="359" value="170" aria-label="Wrap angle in degrees"><span class="deg">&deg;</span></span>
+        </div>
+        <span class="hint" id="idlHint"></span>
+      </div>
+      <div class="draw-wrap">
+        <svg class="draw" id="draw" viewBox="0 0 640 240" role="img" aria-label="Top view of the belt drive"></svg>
+        <div class="empty" id="drawEmpty" hidden>Fix the inputs above to see the drive.</div>
+      </div>
+      <p class="note" id="drawNote"></p>
+    </div>
+  </section>
+
   <section aria-labelledby="out-h">
     <div class="card">
       <h2 id="out-h">Result</h2>
       <div class="hero" id="status" aria-live="polite"></div>
       <div class="tiles" id="tiles"></div>
+      <div class="res-bottom">
       <div class="table-wrap"><table><tbody id="rows"></tbody></table></div>
       <div class="card-sub" id="opts" hidden>
         <h3 class="sub-h">WCP belt options</h3>
         <div class="tiles" id="optTiles"></div>
+      </div>
       </div>
     </div>
   </section>
@@ -246,6 +318,176 @@ tr.head td { border-top: 1.5px solid var(--blue); font-weight: 700; color: var(-
     "3": { "": {"45":["WCP-0666",35666704531616],"50":["WCP-0667",35666704892064],"55":["WCP-0668",35666704990368],"60":["WCP-0669",35666705023136],"65":["WCP-1046",42165156020436],"70":["WCP-0670",35666705055904],"75":["WCP-1047",42165169619156],"80":["WCP-1048",42165173027028],"85":["WCP-0671",35666705121440],"90":["WCP-0672",35666705154208],"95":["WCP-1049",42165173453012],"100":["WCP-0673",35666705186976],"105":["WCP-0674",35666705219744],"110":["WCP-0675",35666705285280],"115":["WCP-1050",35666709151904],"120":["WCP-0676",35666705318048],"125":["WCP-0677",35666705383584],"130":["WCP-1051",42165174927572],"140":["WCP-0678",35666705416352],"150":["WCP-1052",42165175025876],"160":["WCP-1053",42165175910612],"170":["WCP-1054",42165177712852],"180":["WCP-0679",35666705449120],"190":["WCP-1055",42165178040532],"200":["WCP-1056",42165178532052]} }
   };
   var CART_URL = "https://wcproducts.com/cart/add";
+  // Belt tooth profile, one pitch long, read from the WCP HTD and GT2 belt drawings (Detail A) and scaled to the real pitch.
+  // Points are [x along the belt, y from the land], mm. land = land to back thickness, pl = pitch line to land. Both match the published belt data.
+  var PROF = {"5":{"pts":[[0,0],[0.271,0.0],[0.388,0.0],[0.529,0.047],[0.647,0.094],[0.765,0.188],[0.859,0.282],[0.929,0.4],[0.976,0.518],[1.0,0.659],[1.141,1.129],[1.4,1.529],[1.8,1.835],[2.247,2.0],[2.741,2.0],[3.212,1.835],[3.588,1.529],[3.871,1.129],[3.988,0.659],[4.012,0.518],[4.059,0.4],[4.153,0.282],[4.247,0.188],[4.341,0.094],[4.459,0.047],[4.6,0.0],[4.741,0.0],[5,0]],"land":1.718,"pl":0.5715},"3":{"pts":[[0,0],[0.244,0.0],[0.291,0.0],[0.35,0.024],[0.397,0.047],[0.444,0.082],[0.479,0.118],[0.514,0.165],[0.526,0.212],[0.538,0.27],[0.632,0.611],[0.855,0.893],[1.149,1.081],[1.501,1.14],[1.842,1.081],[2.148,0.893],[2.359,0.611],[2.465,0.27],[2.465,0.212],[2.489,0.165],[2.524,0.118],[2.559,0.082],[2.606,0.047],[2.653,0.024],[2.7,0.0],[2.759,0.0],[3,0]],"land":1.269,"pl":0.254}};
+  function backOff(pitch) { var pr = PROF[pitch === 5 ? "5" : "3"]; return pr.land - pr.pl; }
+  // Flange outside diameters (mm) from the WCP 5mm HTD pulley drawings.
+  var FLANGE = { 12: 23, 15: 28, 18: 32, 20: 36, 24: 42, 30: 51, 36: 60 };
+  var cur = null, paused = false;
+  try { paused = window.matchMedia("(prefers-reduced-motion: reduce)").matches; } catch (e) {}
+  var idlCfg = null;   // idler on: { type: "round" | "tooth", od: mm, n: teeth, x: mm, y: mm }, x and y from the center of Pulley 1, y up
+  var curPitch = 5, lastRoute = null;
+  function pitchLine() { return PROF[curPitch === 5 ? "5" : "3"].pl; }
+  // Belt path radius and wrap direction for the idler. Inside the loop it wraps like a pulley (clockwise). Outside it rides the belt back (counter-clockwise).
+  // s is +1 for clockwise. phys is the real radius to draw. A toothed idler only meshes inside the loop, so outside it acts as a plain round idler at its tooth OD.
+  function idlSpec(out) {
+    var pl = pitchLine(), bo = backOff(curPitch), rp = idlCfg.n * curPitch / (2 * Math.PI);
+    var od2 = idlCfg.type === "tooth" ? rp - pl : idlCfg.od / 2;
+    if (out) return { r: od2 + bo, s: -1, phys: od2 };
+    return idlCfg.type === "tooth" ? { r: rp, s: 1, phys: od2 } : { r: od2 + pl, s: 1, phys: od2 };
+  }
+  // Belt tangent from circle A to circle B. s is +1 when the belt wraps a circle clockwise, -1 counter-clockwise.
+  function tang(cA, rA, sA, cB, rB, sB) {
+    var dx = cB[0] - cA[0], dy = cB[1] - cA[1], D = Math.sqrt(dx * dx + dy * dy), k = sB * rB - sA * rA;
+    if (!(D > Math.abs(k) + 1e-9)) return null;
+    var u = Math.atan2(dy, dx) - Math.asin(k / D), mx = Math.sin(u), my = -Math.cos(u);
+    var A = [cA[0] + sA * rA * mx, cA[1] + sA * rA * my], B = [cB[0] + sB * rB * mx, cB[1] + sB * rB * my];
+    return { u: u, A: A, B: B, L: Math.sqrt((B[0] - A[0]) * (B[0] - A[0]) + (B[1] - A[1]) * (B[1] - A[1])) };
+  }
+  function mod2pi(a) { a = a % (2 * Math.PI); if (a < 0) a += 2 * Math.PI; return a > 2 * Math.PI - 1e-9 ? 0 : a; }
+  function buildLoop(cs) {
+    var n = cs.length, T = [], i;
+    for (i = 0; i < n; i++) { var j = (i + 1) % n, t = tang(cs[i].c, cs[i].r, cs[i].s, cs[j].c, cs[j].r, cs[j].s); if (!t) return null; T.push(t); }
+    var len = 0, arcs = [];
+    for (i = 0; i < n; i++) {
+      var uin = T[(i + n - 1) % n].u, uout = T[i].u, dl = cs[i].s > 0 ? mod2pi(uout - uin) : mod2pi(uin - uout);
+      arcs.push(dl); len += T[i].L + cs[i].r * dl;
+    }
+    return { circ: cs, T: T, arcs: arcs, len: len };
+  }
+  // Full belt path (mm, Pulley 1 at the origin, Pulley 2 at x = C, y down). Returns the circles, tangents, arcs, length and idler state.
+  function route(C, D1, D2) {
+    var R1 = D1 / 2, R2 = D2 / 2, p1 = { id: "p1", c: [0, 0], r: R1, s: 1 }, p2 = { id: "p2", c: [C, 0], r: R2, s: 1 };
+    var circ = [p1, p2], state = "none", delta = 0;
+    if (idlCfg) {
+      var I = [idlCfg.x, -idlCfg.y], top = idlCfg.run ? idlCfg.run === "top" : I[1] <= 0;
+      var t0 = top ? tang(p1.c, R1, 1, p2.c, R2, 1) : tang(p2.c, R2, 1, p1.c, R1, 1);
+      if (t0) {
+        var base = top ? p1 : p2, nx = Math.sin(t0.u), ny = -Math.cos(t0.u);
+        delta = (I[0] - base.c[0]) * nx + (I[1] - base.c[1]) * ny - base.r;
+        var out = idlCfg.side === "out", sp = idlSpec(out);
+        if (out ? delta <= 0 : delta > 0) state = "wrong";
+        else if (Math.abs(delta) < sp.r) {
+          var ic = { id: "i", c: I, r: sp.r, s: sp.s, phys: sp.phys, out: out };
+          var r2 = buildLoop(top ? [p1, ic, p2] : [p1, p2, ic]);
+          if (r2) { r2.state = out ? "outside" : "inside"; r2.delta = delta; return r2; }
+          state = "blocked";
+        } else state = out ? "far-out" : "far-in";
+      }
+    }
+    var r1 = buildLoop(circ);
+    if (!r1) return { circ: circ, T: [], arcs: [], len: Infinity, state: state, delta: delta };
+    r1.state = state; r1.delta = delta; return r1;
+  }
+  function loopLen(C, D1, D2) { var r = route(C, D1, D2); return isFinite(r.len) ? r.len : beltLen(C, D1, D2); }
+
+  // ---------- idler goals ----------
+  // The goal is a belt length or a wrap angle. For each spot along a run, the idler is pushed in or out until the goal is met; the spots that meet it form the allowed path.
+  var locus = null, locusKey = "", goalInfo = null, plainW = { p1: 180, p2: 180 };
+  function runGeom(C, D1, D2, top) {
+    var t0 = top ? tang([0, 0], D1 / 2, 1, [C, 0], D2 / 2, 1) : tang([C, 0], D2 / 2, 1, [0, 0], D1 / 2, 1);
+    return t0 ? { A: t0.A, ux: Math.cos(t0.u), uy: Math.sin(t0.u), nx: Math.sin(t0.u), ny: -Math.cos(t0.u), L: t0.L } : null;
+  }
+  function metricOf(r, goal) {
+    if (goal.kind === "len") return r.len;
+    for (var i = 0; i < r.circ.length; i++) if (r.circ[i].id === goal.p) return r.arcs[i] * 180 / Math.PI;
+    return NaN;
+  }
+  function plainWrap(C, D1, D2) {
+    var b = buildLoop([{ id: "p1", c: [0, 0], r: D1 / 2, s: 1 }, { id: "p2", c: [C, 0], r: D2 / 2, s: 1 }]);
+    return b ? { p1: b.arcs[0] * 180 / Math.PI, p2: b.arcs[1] * 180 / Math.PI } : { p1: 180, p2: 180 };
+  }
+  // Route with the idler center at distance t along the run and offset delta from the run line.
+  function evalPt(C, D1, D2, g, top, t, delta, sp, goal) {
+    var I = [g.A[0] + g.ux * t + g.nx * delta, g.A[1] + g.uy * t + g.ny * delta], sv = { x: idlCfg.x, y: idlCfg.y, run: idlCfg.run }, pl = pitchLine();
+    idlCfg.x = I[0]; idlCfg.y = -I[1]; idlCfg.run = top ? "top" : "bot";
+    var r = route(C, D1, D2);
+    idlCfg.x = sv.x; idlCfg.y = sv.y; idlCfg.run = sv.run;
+    if (r.state !== "inside" && r.state !== "outside") return null;
+    if (Math.sqrt(I[0] * I[0] + I[1] * I[1]) < sp.phys + D1 / 2 + backOff(curPitch) + 0.5) return null;
+    if (Math.sqrt((I[0] - C) * (I[0] - C) + I[1] * I[1]) < sp.phys + D2 / 2 + backOff(curPitch) + 0.5) return null;
+    return { m: metricOf(r, goal), x: I[0], y: -I[1] };
+  }
+  function solveT(C, D1, D2, g, top, t, sp, sgn, goal, rng) {
+    var K = 24, prev = null, k, fk, pt, a, b, i, fa, fb;
+    for (k = 0; k <= K; k++) {
+      fk = 0.02 + 0.978 * k / K;
+      pt = evalPt(C, D1, D2, g, top, t, sgn * sp.r * (1 - fk), sp, goal);
+      if (pt && isFinite(pt.m)) {
+        if (rng) { rng.lo = Math.min(rng.lo, pt.m); rng.hi = Math.max(rng.hi, pt.m); }
+        if (prev && (prev.pt.m - goal.target) * (pt.m - goal.target) <= 0) { a = prev.pt; b = pt; fa = prev.f; fb = fk; break; }
+        prev = { pt: pt, f: fk };
+      } else prev = null;
+    }
+    if (!a) return null;
+    for (i = 0; i < 30; i++) {
+      var fm = (fa + fb) / 2, pm = evalPt(C, D1, D2, g, top, t, sgn * sp.r * (1 - fm), sp, goal);
+      if (!pm) break;
+      if ((a.m - goal.target) * (pm.m - goal.target) <= 0) { b = pm; fb = fm; } else { a = pm; fa = fm; }
+    }
+    return Math.abs(a.m - goal.target) <= Math.abs(b.m - goal.target) ? a : b;
+  }
+  // The idler can never sit on a pulley: keep its edge outside each pulley's belt envelope, pushing it straight out if it is too close.
+  function clearIdler(C, D1, D2, unit) {
+    if (!idlCfg) return;
+    var sp = idlSpec(idlCfg.side === "out"), bo = backOff(curPitch), pl = [[0, D1 / 2], [C, D2 / 2]], changed = false;
+    pl.forEach(function (q) {
+      var dx = idlCfg.x - q[0], dy = idlCfg.y, d = Math.sqrt(dx * dx + dy * dy), md = sp.phys + q[1] + bo + 0.5;
+      if (d < md) {
+        if (d < 1e-6) { dx = 0; dy = 1; d = 1; }
+        idlCfg.x = q[0] + dx / d * md; idlCfg.y = dy / d * md; changed = true;
+      }
+    });
+    if (changed) {
+      var kx = unit === "mm" ? 1 : 1 / 25.4, dpx = unit === "mm" ? 1 : 3;
+      $("ix").value = +(idlCfg.x * kx).toFixed(dpx); $("iy").value = +(idlCfg.y * kx).toFixed(dpx);
+    }
+  }
+  // Most slack this idler can take up on either run (pressed in as far as it goes).
+  function maxTake(C, D1, D2) {
+    var sp = idlSpec(idlCfg.side === "out"), sgn = idlCfg.side === "out" ? 1 : -1, best = 0, goal = { kind: "len", target: 0 }, plain = beltLen(C, D1, D2);
+    [true, false].forEach(function (top) {
+      var g = runGeom(C, D1, D2, top), k, pt;
+      if (!g) return;
+      for (k = 0; k <= 60; k++) { pt = evalPt(C, D1, D2, g, top, g.L * k / 60, sgn * sp.r * 0.002, sp, goal); if (pt && isFinite(pt.m)) best = Math.max(best, pt.m - plain); }
+    });
+    return best;
+  }
+  function getLocus(C, D1, D2, goal) {
+    var key = [C.toFixed(3), D1.toFixed(3), D2.toFixed(3), curPitch, idlCfg.side, idlCfg.type, idlCfg.od.toFixed(3), idlCfg.n, goal.kind, goal.p || "", goal.target.toFixed(3)].join("|");
+    if (locus && key === locusKey) return locus;
+    var sp = idlSpec(idlCfg.side === "out"), sgn = idlCfg.side === "out" ? 1 : -1, res = { lines: [], lo: Infinity, hi: -Infinity, geo: {}, sp: sp, sgn: sgn, goal: goal };
+    [true, false].forEach(function (top) {
+      var g = runGeom(C, D1, D2, top); if (!g) return;
+      res.geo[top ? "top" : "bot"] = g;
+      var line = [], T = 90, k, t, pt;
+      for (k = 0; k <= T; k++) {
+        t = g.L * k / T; pt = solveT(C, D1, D2, g, top, t, sp, sgn, goal, res);
+        if (pt) { pt.t = t; line.push(pt); } else if (line.length) { res.lines.push({ top: top, pts: line }); line = []; }
+      }
+      if (line.length) res.lines.push({ top: top, pts: line });
+    });
+    locus = res; locusKey = key; return res;
+  }
+  // Nearest spot on the allowed path to (x, y) in mm, y up.
+  function snapLocus(L, x, y, C, D1, D2) {
+    var best = null;
+    L.lines.forEach(function (ln) {
+      var pts = ln.pts, i, q;
+      if (pts.length === 1) { q = { d: Math.hypot(pts[0].x - x, pts[0].y - y), top: ln.top, t: pts[0].t }; if (!best || q.d < best.d) best = q; return; }
+      for (i = 0; i < pts.length - 1; i++) {
+        var a = pts[i], b = pts[i + 1], dx = b.x - a.x, dy = b.y - a.y, den = dx * dx + dy * dy, u = den ? ((x - a.x) * dx + (y - a.y) * dy) / den : 0;
+        u = Math.max(0, Math.min(1, u));
+        q = { d: Math.hypot(a.x + dx * u - x, a.y + dy * u - y), top: ln.top, t: a.t + (b.t - a.t) * u, fx: a.x + dx * u, fy: a.y + dy * u };
+        if (!best || q.d < best.d) best = q;
+      }
+    });
+    if (!best) return null;
+    var g = L.geo[best.top ? "top" : "bot"], pt = solveT(C, D1, D2, g, best.top, best.t, L.sp, L.sgn, L.goal, null);
+    if (pt) return { x: pt.x, y: pt.y, run: best.top ? "top" : "bot" };
+    return best.fx !== undefined ? { x: best.fx, y: best.fy, run: best.top ? "top" : "bot" } : null;
+  }
   // Saved belts live in memory only, so they reset when the page reloads.
   var saved = [];
   // "70T x 15mm Wide (WCP-0165)"; WCP's GT2 belts are 9 mm wide.
@@ -319,12 +561,12 @@ tr.head td { border-top: 1.5px solid var(--blue); font-weight: 700; color: var(-
   function centerFor(L, D1, D2) {
     var d = Math.abs(D2 - D1);
     var lo = d / 2 + 1e-9;
-    if (L < beltLen(lo, D1, D2)) return null;
+    if (L < loopLen(lo, D1, D2)) return null;
     var hi = Math.max(L, lo * 2);
-    while (beltLen(hi, D1, D2) < L) hi *= 2;
+    while (loopLen(hi, D1, D2) < L) hi *= 2;
     for (var i = 0; i < 80; i++) {
       var mid = (lo + hi) / 2;
-      if (beltLen(mid, D1, D2) < L) lo = mid; else hi = mid;
+      if (loopLen(mid, D1, D2) < L) lo = mid; else hi = mid;
     }
     return (lo + hi) / 2;
   }
@@ -337,23 +579,273 @@ tr.head td { border-top: 1.5px solid var(--blue); font-weight: 700; color: var(-
   function tile(value, label, sub, hl, extra) {
     return '<div class="tile' + (hl ? " hl" : "") + '"><div class="count">' + esc(value) + '</div><div class="size">' + esc(label) + '</div>' + (sub ? '<div class="pn">' + esc(sub) + "</div>" : "") + (extra || "") + "</div>";
   }
-  function row(label, text) { return "<tr><td>" + esc(label) + '</td><td class="num">' + esc(text) + "</td></tr>"; }
+  function row(label, text, html) { return "<tr><td>" + esc(label) + '</td><td class="num">' + esc(text) + (html || "") + "</td></tr>"; }
 
+  // ---------- top view ----------
+  var view = null, dragLock = null, drawToken = 0;
+  function mkSegs(rt) {
+    var segs = [], sCum = 0, m = rt.circ.length, i;
+    for (i = 0; i < m; i++) {
+      var t = rt.T[i], j = (i + 1) % m, cj = rt.circ[j], al = cj.r * rt.arcs[j];
+      segs.push({ s0: sCum, A: t.A, ux: Math.cos(t.u), uy: Math.sin(t.u), mx: -Math.sin(t.u), my: Math.cos(t.u), arc: false }); sCum += t.L;
+      segs.push({ s0: sCum, arc: true, c: cj.c, r: cj.r, sg: cj.s, th: Math.atan2(t.B[1] - cj.c[1], t.B[0] - cj.c[0]) }); sCum += al;
+    }
+    return segs;
+  }
+  // Point at distance s along the path, y mm inward from the pitch line (right of travel).
+  function posAt(segs, len, s, y) {
+    s = s % len; if (s < 0) s += len;
+    var lo = 0, hi = segs.length - 1;
+    while (lo < hi) { var mid = (lo + hi + 1) >> 1; if (segs[mid].s0 <= s) lo = mid; else hi = mid - 1; }
+    var g = segs[lo], l = s - g.s0;
+    if (!g.arc) return [g.A[0] + g.ux * l + g.mx * y, g.A[1] + g.uy * l + g.my * y];
+    var th = g.th + g.sg * l / g.r, rad = g.r - g.sg * y;
+    return [g.c[0] + rad * Math.cos(th), g.c[1] + rad * Math.sin(th)];
+  }
+  function startBelt(rt, bk, backD, P, sc, dsMM, n, pl, pts, pitch, bo, token, SPEED) {
+    var svg = $("draw"), el = $("beltP"), segs = mkSegs(rt), len = rt.len, lastT = -1, kx = dsMM / pitch, np = pts.length;
+    function frame() {
+      if (token !== drawToken || !el) return;
+      var t = 0; try { t = svg.getCurrentTime(); } catch (e) {}
+      if (t !== lastT) {
+        lastT = t;
+        var shift = t * SPEED / sc, dd = "", k, j, p;
+        for (k = 0; k < n; k++) for (j = (k ? 1 : 0); j < np; j++) {
+          p = posAt(segs, len, shift + k * dsMM + (pts[j][0] - pitch / 2) * kx, pl + pts[j][1]);
+          p = P(p); dd += (k || j ? " L" : "M") + p[0].toFixed(2) + " " + p[1].toFixed(2);
+        }
+        el.setAttribute("d", backD + " " + dd + " Z");
+      }
+      requestAnimationFrame(frame);
+    }
+    frame();
+  }
+  function drawDrive() {
+    var svg = $("draw");
+    if (!cur) { svg.innerHTML = ""; svg.hidden = true; $("drawEmpty").hidden = false; $("drawNote").textContent = ""; return; }
+    svg.hidden = false; $("drawEmpty").hidden = true;
+    var pitch = cur.pitch, PR = PROF[pitch === 5 ? "5" : "3"], pts = PR.pts, pl = PR.pl, bo = PR.land - pl, depth = 0;
+    pts.forEach(function (q) { if (q[1] > depth) depth = q[1]; });
+    var N1 = cur.t1, N2 = cur.t2, n = cur.n, C = cur.C, rt = route(C, cur.D1, cur.D2);
+    var vw = 640, vh = 240, pad = 22, lab = 22, dimH = 26, SPEED = 70;
+    var minX = 1e9, maxX = -1e9, minY = 1e9, maxY = -1e9;
+    rt.circ.forEach(function (ci) {
+      var rr = (ci.id === "i" ? ci.phys : ci.r) + bo + 0.5;
+      minX = Math.min(minX, ci.c[0] - rr); maxX = Math.max(maxX, ci.c[0] + rr); minY = Math.min(minY, ci.c[1] - rr); maxY = Math.max(maxY, ci.c[1] + rr);
+    });
+    if (idlCfg && rt.circ.length === 2) { /* idler not touching: still show it where it sits */
+      var spx = idlSpec(idlCfg.side === "out"), pr0 = spx.phys + 0.5;
+      minX = Math.min(minX, idlCfg.x - pr0); maxX = Math.max(maxX, idlCfg.x + pr0); minY = Math.min(minY, -idlCfg.y - pr0); maxY = Math.max(maxY, -idlCfg.y + pr0);
+    }
+    if (locus && goalInfo && goalInfo.show) locus.lines.forEach(function (ln) { ln.pts.forEach(function (q) {
+      var pr1 = locus.sp.phys + 0.5;
+      minX = Math.min(minX, q.x - pr1); maxX = Math.max(maxX, q.x + pr1); minY = Math.min(minY, -q.y - pr1); maxY = Math.max(maxY, -q.y + pr1);
+    }); });
+    var w = maxX - minX, h = maxY - minY, availW = vw - 2 * pad, availH = vh - lab - dimH - pad / 2;
+    var sc, ox, oy;
+    if (dragLock) { sc = dragLock.sc; ox = dragLock.ox; oy = dragLock.oy; }
+    else {
+      sc = Math.min(availW / w, availH / h);
+      ox = (vw - w * sc) / 2 - minX * sc; oy = lab + (availH - h * sc) / 2 - minY * sc;
+    }
+    view = { sc: sc, ox: ox, oy: oy };
+    var P = function (pt) { return [ox + pt[0] * sc, oy + pt[1] * sc]; };
+    var ci, T = rt.T, circ = rt.circ, m = circ.length;
+    var d = "", pathPx = 0, sArr = [], sCum = 0, i;
+    if (isFinite(rt.len)) {
+      var st = P(T[0].A);
+      d = "M" + f(st[0], 2) + " " + f(st[1], 2);
+      for (i = 0; i < m; i++) {
+        var j = (i + 1) % m, a0 = P(T[i].A), b0 = P(T[i].B), cj = circ[j], nx2 = P(T[j].A), rj = cj.r * sc, dl = rt.arcs[j];
+        d += " L" + f(b0[0], 2) + " " + f(b0[1], 2);
+        sArr[j] = sCum + T[i].L * sc;
+        sCum += T[i].L * sc + cj.r * sc * dl;
+        d += " A" + f(rj, 2) + " " + f(rj, 2) + " 0 " + (dl > Math.PI ? 1 : 0) + " " + (cj.s > 0 ? 1 : 0) + " " + f(nx2[0], 2) + " " + f(nx2[1], 2);
+      }
+      pathPx = sCum;
+    }
+    var ds = pathPx / n, cyc = pathPx / SPEED, kk = ds / pitch;
+    var rot = function (cxp, cyp, rp, N, phi, dur, dir) {
+      var tipR = rp - pl * kk, g = "", ii, jj, pp = [], a;
+      for (ii = 0; ii < N; ii++) for (jj = (ii ? 1 : 0); jj < pts.length; jj++) {
+        a = (ii * pitch + pts[jj][0]) / (pitch * N) * 2 * Math.PI;
+        var rad = tipR - pts[jj][1] * kk;
+        pp.push((rad * Math.cos(a - Math.PI / 2)).toFixed(2) + " " + (rad * Math.sin(a - Math.PI / 2)).toFixed(2));
+      }
+      var dd = "M" + pp.join(" L") + " Z";
+      var hexR = 12.7 * sc / Math.sqrt(3), hp = "", hk;
+      for (hk = 0; hk < 6; hk++) { var ha = (hk * 60 + 30) * Math.PI / 180; hp += (hk ? " L" : "M") + f(hexR * Math.sin(ha), 2) + " " + f(-hexR * Math.cos(ha), 2); }
+      var hexOk = tipR - depth * kk > hexR + 4;
+      g = '<g transform="translate(' + f(cxp, 2) + " " + f(cyp, 2) + ')"><g transform="rotate(' + f(phi, 2) + ')">' +
+        '<animateTransform attributeName="transform" type="rotate" from="' + f(phi, 2) + '" to="' + f(phi + 360 * dir, 2) + '" dur="' + f(dur, 2) + 's" repeatCount="indefinite"/>' +
+        '<path d="' + dd + '" fill="var(--white)" stroke="var(--blue-deep)" stroke-width="1.2" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>' +
+        (hexOk ? '<path d="' + hp + ' Z" fill="var(--blue-50)" stroke="var(--blue-deep)" stroke-width="1.2" stroke-linejoin="round"/>' : '<circle r="2.5" fill="var(--blue-50)" stroke="var(--blue-deep)" stroke-width="1.2"/>') +
+        '</g></g>';
+      return g;
+    };
+    var out = '<rect x="0" y="0" width="' + vw + '" height="' + vh + '" fill="var(--blue-50)"/>';
+    var phase = function (k) { // rotation that seats the belt teeth in this pulley's grooves
+      var cc = circ[k], arr = T[(k + m - 1) % m].B, th = Math.atan2(arr[1] - cc.c[1], arr[0] - cc.c[0]), N = cc.id === "p1" ? N1 : cc.id === "p2" ? N2 : idlCfg.n;
+      return th + (0 - sArr[k]) / (cc.r * sc) - Math.PI / N + Math.PI / 2;
+    };
+    var ring = function (cc, N) { return FLANGE[N] && pitch === 5 ? '<circle cx="' + f(P(cc.c)[0], 2) + '" cy="' + f(P(cc.c)[1], 2) + '" r="' + f(FLANGE[N] / 2 * sc, 2) + '" fill="none" stroke="var(--ink-soft)" stroke-width="1" stroke-dasharray="4 3" opacity="0.7"/>' : ""; };
+    var idlC = null, idlK = -1;
+    circ.forEach(function (cc, k) { if (cc.id === "i") { idlC = cc; idlK = k; } });
+    var hasPath = isFinite(rt.len);
+    circ.forEach(function (cc, k) {
+      if (cc.id === "i") return;
+      var N = cc.id === "p1" ? N1 : N2, pc = P(cc.c);
+      out += ring(cc, N);
+      if (hasPath) out += rot(pc[0], pc[1], cc.r * sc, N, phase(k) * 180 / Math.PI, 2 * Math.PI * cc.r * sc / SPEED, 1);
+    });
+    var idlDrawn = "";
+    if (idlCfg) {
+      var ipc, ipr, isn = 1, toothed = false, ipitchR = 0;
+      if (idlC) { ipc = P(idlC.c); ipr = idlC.phys * sc; isn = idlC.s; toothed = idlCfg.type === "tooth" && !idlC.out; }
+      else { ipc = P([idlCfg.x, -idlCfg.y]); var sp0 = idlSpec(idlCfg.side === "out"); ipr = sp0.phys * sc; }
+      if (toothed) out += rot(ipc[0], ipc[1], idlC.r * sc, idlCfg.n, phase(idlK) * 180 / Math.PI, 2 * Math.PI * idlC.r * sc / SPEED, 1);
+      else out += '<g transform="translate(' + f(ipc[0], 2) + " " + f(ipc[1], 2) + ')"><g>' + (idlC ? '<animateTransform attributeName="transform" type="rotate" from="0" to="' + (isn > 0 ? 360 : -360) + '" dur="' + f(2 * Math.PI * (idlC.r * sc) / SPEED, 2) + 's" repeatCount="indefinite"/>' : "") +
+        '<circle r="' + f(Math.max(2, ipr), 2) + '" fill="var(--white)" stroke="var(--ink)" stroke-width="1.2"' + (idlC ? "" : ' stroke-dasharray="4 3"') + '/><circle r="' + f(Math.max(1.5, ipr * 0.25), 2) + '" fill="var(--blue-50)" stroke="var(--ink)" stroke-width="1.2"/>' +
+        '<line x1="0" y1="' + f(-ipr, 2) + '" x2="0" y2="' + f(-ipr * 0.55, 2) + '" stroke="var(--ink)" stroke-width="1.2"/></g></g>';
+      idlDrawn = '<circle class="idl-hit" cx="' + f(ipc[0], 2) + '" cy="' + f(ipc[1], 2) + '" r="' + f(Math.max(12, ipr + 6), 2) + '" fill="transparent" style="cursor:grab"/>';
+    }
+    // Belt: the tooth profile from the WCP drawing is laid along the real belt path and bent around each pulley the same way the pulley grooves are cut,
+    // so the teeth seat exactly. It is redrawn each frame from the animation clock, in step with the pulleys.
+    var beltEl = null, token = ++drawToken;
+    if (hasPath) {
+      var bk = buildLoop(circ.map(function (cc) { return { id: cc.id, c: cc.c, r: cc.r + cc.s * bo, s: cc.s }; })), backD = "";
+      if (bk) {
+        var b0 = P(bk.T[0].A); backD = "M" + f(b0[0], 2) + " " + f(b0[1], 2);
+        for (i = 0; i < m; i++) {
+          var jb = (i + 1) % m, bb = P(bk.T[i].B), nb = P(bk.T[jb].A), rb = bk.circ[jb].r * sc, dlb = bk.arcs[jb];
+          backD += " L" + f(bb[0], 2) + " " + f(bb[1], 2) + " A" + f(rb, 2) + " " + f(rb, 2) + " 0 " + (dlb > Math.PI ? 1 : 0) + " " + (bk.circ[jb].s > 0 ? 1 : 0) + " " + f(nb[0], 2) + " " + f(nb[1], 2);
+        }
+        backD += " Z";
+      }
+      out += '<path id="beltP" d="' + backD + '" fill="var(--blue-100)" fill-rule="evenodd" stroke="var(--blue-deep)" stroke-width="1" stroke-linejoin="round" vector-effect="non-scaling-stroke"/>';
+      beltEl = true;
+    }
+    if (locus && goalInfo && goalInfo.show) locus.lines.forEach(function (ln) {
+      var dl = "";
+      ln.pts.forEach(function (q, qi) { var pq = P([q.x, -q.y]); dl += (qi ? " L" : "M") + f(pq[0], 2) + " " + f(pq[1], 2); });
+      if (ln.pts.length === 1) { var p0 = P([ln.pts[0].x, -ln.pts[0].y]); out += '<circle cx="' + f(p0[0], 2) + '" cy="' + f(p0[1], 2) + '" r="2.5" fill="var(--blue)"/>'; }
+      else out += '<path d="' + dl + '" fill="none" stroke="var(--blue)" stroke-width="1.8" stroke-dasharray="6 5" stroke-linecap="round" stroke-linejoin="round" opacity="0.9"/>';
+    });
+    out += idlDrawn;
+    if (idlCfg) {
+      var o1 = P([0, 0]), oi = P([idlCfg.x, -idlCfg.y]), ccmm = Math.sqrt(idlCfg.x * idlCfg.x + idlCfg.y * idlCfg.y), ang = Math.atan2(oi[1] - o1[1], oi[0] - o1[0]) * 180 / Math.PI;
+      var sgn = function (mm) { var mmU = radio("unit") === "mm", v = mmU ? mm : mm / 25.4; return (v < 0 ? "\u2212" : "+") + Math.abs(v).toFixed(mmU ? 1 : 3) + (mmU ? " mm" : '"'); };
+      var dim = 'stroke="var(--blue-deep)" stroke-width="1.2"', tx = 'font-size="12" font-weight="700" fill="var(--blue-deep)" text-anchor="middle" stroke="var(--blue-50)" stroke-width="3" paint-order="stroke"';
+      var flip = ang > 90 || ang < -90, mxp = (o1[0] + oi[0]) / 2, myp = (o1[1] + oi[1]) / 2;
+      out += '<line x1="' + f(o1[0], 2) + '" y1="' + f(o1[1], 2) + '" x2="' + f(oi[0], 2) + '" y2="' + f(o1[1], 2) + '" ' + dim + ' stroke-dasharray="5 4"/>' +
+        '<line x1="' + f(oi[0], 2) + '" y1="' + f(o1[1], 2) + '" x2="' + f(oi[0], 2) + '" y2="' + f(oi[1], 2) + '" ' + dim + ' stroke-dasharray="5 4"/>' +
+        '<line x1="' + f(o1[0], 2) + '" y1="' + f(o1[1], 2) + '" x2="' + f(oi[0], 2) + '" y2="' + f(oi[1], 2) + '" ' + dim + '/>' +
+        '<circle cx="' + f(o1[0], 2) + '" cy="' + f(o1[1], 2) + '" r="2.5" fill="var(--blue-deep)"/><circle cx="' + f(oi[0], 2) + '" cy="' + f(oi[1], 2) + '" r="2.5" fill="var(--blue-deep)"/>' +
+        '<text x="' + f((o1[0] + oi[0]) / 2, 2) + '" y="' + f(o1[1] + (oi[1] > o1[1] ? -6 : 14), 2) + '" ' + tx + '>X ' + esc(sgn(idlCfg.x)) + '</text>' +
+        '<text x="' + f(oi[0] + (oi[0] >= o1[0] ? 8 : -8), 2) + '" y="' + f((o1[1] + oi[1]) / 2 + 4, 2) + '" ' + tx.replace("middle", oi[0] >= o1[0] ? "start" : "end") + '>Y ' + esc(sgn(idlCfg.y)) + '</text>' +
+        '<text x="' + f(oi[0], 2) + '" y="' + f(idlCfg.y >= 0 ? oi[1] - idlSpec(idlCfg.side === "out").phys * sc - 8 : oi[1] + idlSpec(idlCfg.side === "out").phys * sc + 14, 2) + '" font-size="12" font-weight="500" fill="var(--ink)" text-anchor="middle" stroke="var(--blue-50)" stroke-width="3" paint-order="stroke">' + esc(idlCfg.type === "tooth" ? "Idler | " + idlCfg.n + "T" : "Idler | OD " + both(idlCfg.od)) + '</text>' +
+        '<text transform="translate(' + f(mxp, 2) + " " + f(myp, 2) + ") rotate(" + f(flip ? ang + 180 : ang, 2) + ')" dy="-6" ' + tx + '>C-C ' + esc(both(ccmm)) + "</text>";
+    }
+    var lbl = function (cc, txt) { var pc = P(cc.c); return '<text x="' + f(pc[0], 2) + '" y="' + f(pc[1] - (cc.r + bo) * sc - 8, 2) + '" text-anchor="middle" font-size="12" font-weight="500" fill="var(--ink)">' + esc(txt) + "</text>"; };
+    out += lbl(circ[0], "Pulley 1 | " + N1 + "T (driver)") + lbl(circ.filter(function (q) { return q.id === "p2"; })[0], "Pulley 2 | " + N2 + "T");
+    var dy = vh - 20, a1 = P([0, 0])[0], a2 = P([C, 0])[0];
+    out += '<line x1="' + f(a1, 2) + '" y1="' + dy + '" x2="' + f(a2, 2) + '" y2="' + dy + '" stroke="var(--blue-soft)" stroke-width="1"/>' +
+      '<line x1="' + f(a1, 2) + '" y1="' + (dy - 4) + '" x2="' + f(a1, 2) + '" y2="' + (dy + 4) + '" stroke="var(--blue-soft)" stroke-width="1"/>' +
+      '<line x1="' + f(a2, 2) + '" y1="' + (dy - 4) + '" x2="' + f(a2, 2) + '" y2="' + (dy + 4) + '" stroke="var(--blue-soft)" stroke-width="1"/>' +
+      '<text x="' + f((a1 + a2) / 2, 2) + '" y="' + (dy + 14) + '" text-anchor="middle" font-size="12" font-weight="500" fill="var(--ink)">Center ' + esc(both(C)) + "</text>";
+    svg.innerHTML = out;
+    applyPlay();
+    if (beltEl && bk) startBelt(rt, bk, backD, P, sc, ds / pitch * 0 + rt.len / n, n, pl, pts, pitch, bo, token, SPEED);
+    $("drawNote").textContent = "Drawn to scale with the " + n + " tooth belt" + (cur.note ? " (" + cur.note + ")" : "") + ". Belt and pulley teeth use the WCP " + (pitch === 5 ? "HTD 5MM" : "GT2 3mm") + " tooth profile." +
+      (idlCfg ? (goalInfo && goalInfo.show ? " Drag the idler along the dashed path. Every spot on it meets the goal. X and Y run from the center of Pulley 1 to the center of the idler." : " Drag the idler to place it. X and Y run from the center of Pulley 1 to the center of the idler.") : "");
+  }
+  // Drag the idler in the view. X and Y are measured from the center of Pulley 1 to the center of the idler.
+  (function () {
+    var wrap = document.querySelector(".draw-wrap"), svg = $("draw"), dragging = false;
+    function toMM(e) {
+      var pt = svg.createSVGPoint(); pt.x = e.clientX; pt.y = e.clientY;
+      var q = pt.matrixTransform(svg.getScreenCTM().inverse());
+      return [(q.x - view.ox) / view.sc, (q.y - view.oy) / view.sc];
+    }
+    wrap.addEventListener("pointerdown", function (e) {
+      if (!idlCfg || !view || e.button > 0 || !(e.target.closest && e.target.closest(".idl-hit"))) return;
+      e.preventDefault(); dragging = true; dragLock = { sc: view.sc, ox: view.ox, oy: view.oy };
+      try { wrap.setPointerCapture(e.pointerId); } catch (err) {}
+    });
+    wrap.addEventListener("pointermove", function (e) {
+      if (!dragging) return;
+      var p = toMM(e), u = radio("unit") === "mm", k = u ? 1 : 1 / 25.4, dp = u ? 1 : 2;
+      $("ix").value = +(p[0] * k).toFixed(dp); $("iy").value = +(-p[1] * k).toFixed(dp); $("irun").value = "";
+      calc();
+    });
+    function end() { if (!dragging) return; dragging = false; dragLock = null; calc(); }
+    wrap.addEventListener("pointerup", end); wrap.addEventListener("pointercancel", end); wrap.addEventListener("lostpointercapture", end);
+  })();
+  function applyPlay() {
+    var svg = $("draw");
+    try { if (paused) svg.pauseAnimations(); else svg.unpauseAnimations(); } catch (e) {}
+    $("playBtn").textContent = paused ? "Play" : "Pause";
+    $("playBtn").setAttribute("aria-pressed", paused ? "true" : "false");
+  }
+  $("playBtn").addEventListener("click", function () { paused = !paused; applyPlay(); });
+
+  function idlRow(C, D1, D2) {
+    if (!idlCfg) return "";
+    var r = route(C, D1, D2);
+    if (r.state === "inside" || r.state === "outside") {
+      var wr = "", i;
+      for (i = 0; i < r.circ.length; i++) wr += r.circ[i].id === "i" ? row("Idler Wrap", f(r.arcs[i] * 180 / Math.PI, 1) + "\u00b0") : row(r.circ[i].id === "p1" ? "Pulley 1 Wrap" : "Pulley 2 Wrap", f(r.arcs[i] * 180 / Math.PI, 1) + "\u00b0");
+      return row("Idler Belt Take-Up", both(r.len - beltLen(C, D1, D2)) + " (" + r.state + " the loop)") + wr;
+    }
+    return row("Idler", "Not touching the belt");
+  }
+  function idlHint() {
+    var h = "Optional. Use a round OD (bearing, printed idler, shaft) or a toothed pulley, on the inside or outside of the belt.";
+    if (radio("idl") === "1" && goalInfo && goalInfo.msg) { $("idlHint").textContent = goalInfo.msg; return; }
+    if (radio("idl") === "1") {
+      h = "Drag the idler in the view to place it. X and Y run from the center of Pulley 1 to the center of the idler.";
+      if (!idlCfg) h = "Enter the idler size to include it.";
+      else if (cur) {
+        var r = route(cur.C, cur.D1, cur.D2);
+        if (r.state === "outside") h = "Pressing on the back of the belt." + (idlCfg.type === "tooth" ? " A toothed idler only meshes on the tooth side, so it acts as a plain round idler here." : "");
+        else if (r.state === "inside") h = "Wrapped by the belt's tooth side." + (idlCfg.type === "round" ? " A toothed pulley would mesh better here." : "");
+        else if (r.state === "blocked") h = "The idler overlaps a pulley at this position. Drag it away from the pulleys.";
+        else if (r.state === "wrong") h = idlCfg.side === "out" ? "An outside idler goes outside the belt run. Drag it above the top run or below the bottom run." : "An inside idler goes between the two runs. Drag it inside the belt loop.";
+        else h = "Not touching the belt. Drag it onto the belt.";
+      }
+    }
+    $("idlHint").textContent = h;
+  }
   function calc() {
     var mode = radio("mode") === "2" ? 2 : 1;
     $("cdFields").hidden = mode !== 1;
     $("btFields").hidden = mode !== 2;
 
     var pitch = parseFloat(radio("belt"));
-    $("widthRow").hidden = pitch !== 5;
+    // Width stays on screen; GT2 only comes in 9 mm, so 15 mm is greyed out for it.
+    if (pitch !== 5) $("w9").checked = true;
+    $("w15").disabled = pitch !== 5;
     var unit = radio("unit") === "mm" ? "mm" : "in";
     var toMM = function (v) { return unit === "in" ? v * 25.4 : v; };
+    curPitch = pitch;
+    var idlOn = radio("idl") === "1", tooth = radio("itype") === "tooth";
+    $("idlType").hidden = !idlOn; $("idlSide").hidden = !idlOn; $("idlSideRow").hidden = !idlOn; $("idlFields").hidden = !idlOn;
+    $("idlOD").hidden = tooth; $("idlTN").hidden = !tooth;
+    var odV = parseFloat($("iod").value), tnV = parseInt($("itn").value, 10), ixV = parseFloat($("ix").value), iyV = parseFloat($("iy").value);
+    var idlOk = idlOn && isFinite(ixV) && isFinite(iyV) && (tooth ? tnV >= 6 : odV > 0);
+    idlCfg = idlOk ? { side: radio("iside") === "in" ? "in" : "out", type: tooth ? "tooth" : "round", od: toMM(odV), n: tnV, x: toMM(ixV), y: toMM(iyV), run: mode === 1 ? $("irun").value : "" } : null;
+    goalInfo = null;
+    var gw = radio("igoal") === "wrap";
+    $("idlGoalRow").hidden = !idlOn || mode !== 1;
+    $("idlBeltW").hidden = gw; $("idlWP").hidden = !gw; $("idlWA").hidden = !gw;
+    if (idlOn && mode === 2) goalInfo = { show: false, msg: "In this mode the center distance follows the idler, so it can sit anywhere along the belt. Use Center Distance mode to place it for a belt length or wrap angle." };
     $("opts").hidden = true;
     var t1 = parseInt($("t1").value, 10), t2 = parseInt($("t2").value, 10);
 
     function bad(msg) {
       setStatus(true, "Check inputs", msg);
       $("tiles").innerHTML = ""; $("rows").innerHTML = ""; $("rows").closest(".table-wrap").hidden = true; $("opts").hidden = true;
+      cur = null; idlHint(); drawDrive();
     }
     if (!(t1 > 0) || !(t2 > 0)) { bad("Enter a tooth count for both pulleys."); return; }
 
@@ -368,12 +860,41 @@ tr.head td { border-top: 1.5px solid var(--blue); font-weight: 700; color: var(-
       var ex = parseFloat($("ex").value); if (!(ex > 0)) ex = 0;
       var cmm = toMM(c + ex);
       if (cmm <= Math.abs(D2 - D1) / 2) { bad("Center distance is too small for these pulleys. The belt cannot wrap them."); return; }
-      var L = beltLen(cmm, D1, D2), teeth = L / pitch;
-      setStatus(false, both(L), "", "Belt Pitch Length");
       tiles = tile(both(D1), "Pulley 1 Pitch Diameter", "") +
               tile(both(D2), "Pulley 2 Pitch Diameter", "") +
               ratioTile;
+      var snapped = false;
+      plainW = plainWrap(cmm, D1, D2);
+      if (idlCfg) {
+        var plainL = beltLen(cmm, D1, D2), sizes0 = sizesFor(pitch), cap = maxTake(cmm, D1, D2), opts = sizes0.filter(function (n) { return n * pitch > plainL + 0.01 && n * pitch <= plainL + cap - 0.01; }).slice(0, 20), selB = $("ibelt");
+        if (selB.getAttribute("data-sig") !== opts.join(",")) {
+          var keep = parseInt(selB.value, 10);
+          selB.innerHTML = opts.map(function (n) { return '<option value="' + n + '">' + n + " Teeth</option>"; }).join("");
+          selB.setAttribute("data-sig", opts.join(","));
+          if (opts.indexOf(keep) !== -1) selB.value = String(keep);
+        }
+        var goal = null;
+        if (gw) { var wa = parseFloat($("iwa").value); if (isFinite(wa) && wa > 0 && wa < 360) goal = { kind: "wrap", p: radio("iwp") === "2" ? "p2" : "p1", target: wa }; }
+        else { var nB = parseInt(selB.value, 10); if (nB > 0) goal = { kind: "len", n: nB, target: nB * pitch }; }
+        if (goal) {
+          var Lc = getLocus(cmm, D1, D2, goal), sn = Lc.lines.length ? snapLocus(Lc, idlCfg.x, idlCfg.y, cmm, D1, D2) : null, gname = goal.kind === "wrap" ? f(goal.target, 1) + "\u00b0 of wrap on " + (goal.p === "p2" ? "Pulley 2" : "Pulley 1") : "the " + goal.n + " tooth belt";
+          if (sn) {
+            idlCfg.x = sn.x; idlCfg.y = sn.y; idlCfg.run = sn.run; snapped = true;
+            var kx = unit === "mm" ? 1 : 1 / 25.4, dpx = unit === "mm" ? 1 : 3;
+            $("ix").value = +(sn.x * kx).toFixed(dpx); $("iy").value = +(sn.y * kx).toFixed(dpx); $("irun").value = sn.run;
+            goalInfo = { show: true, goal: goal, msg: "Drag the idler along the dashed path. Every spot on it gives " + gname + "." };
+          } else {
+            var rngTxt = isFinite(Lc.lo) ? (goal.kind === "wrap" ? " This idler can give " + f(Lc.lo, 1) + "\u00b0 to " + f(Lc.hi, 1) + "\u00b0 on this side." : " This idler can take up " + both(Lc.lo - plainL) + " to " + both(Lc.hi - plainL) + " of slack on this side.") : "";
+            goalInfo = { show: false, goal: goal, msg: "No position gives " + gname + " with this idler." + rngTxt + " Change the idler size, the side, the angle or the belt." };
+          }
+        } else goalInfo = { show: false, msg: gw ? "Enter a wrap angle between 0 and 360 degrees." : (function () { var nx = sizes0.filter(function (n) { return n * pitch > plainL + 0.01; })[0]; return "No WCP belt fits this setup. This idler can take up " + both(cap) + " of slack" + (nx ? ", and the next belt up needs " + both(nx * pitch - plainL) : "") + ". Change the center distance, the idler size or the side."; })() };
+      }
+      clearIdler(cmm, D1, D2, unit);
+      var L = loopLen(cmm, D1, D2), teeth = L / pitch;
+      if (snapped && goalInfo.goal.kind === "len") { L = goalInfo.goal.target; teeth = goalInfo.goal.n; }
+      setStatus(false, both(L), "", "Belt Pitch Length");
       if (ex > 0) rows += row("Center Distance Used", both(cmm) + " (desired + extra)");
+      rows += idlRow(cmm, D1, D2);
 
       var list = sizesFor(pitch), ci = 0;
       list.forEach(function (n, i) { if (Math.abs(n - teeth) <= Math.abs(list[ci] - teeth)) ci = i; });
@@ -386,47 +907,73 @@ tr.head td { border-top: 1.5px solid var(--blue); font-weight: 700; color: var(-
       $("optTiles").innerHTML = opt(ci - 1, "Shorter Belt") + opt(ci, "Closest Belt", true) + opt(ci + 1, "Longer Belt");
       $("opts").hidden = false;
       markSaved();
+      var nb = list[ci], cb = centerFor(nb * pitch, D1, D2);
+      cur = cb === null ? null : { C: cb, D1: D1, D2: D2, n: nb, pitch: pitch, t1: t1, t2: t2, note: "closest WCP size" };
+      if (idlCfg) cur = { C: cmm, D1: D1, D2: D2, n: snapped && goalInfo.goal.kind === "len" ? goalInfo.goal.n : Math.max(6, Math.round(teeth)), pitch: pitch, t1: t1, t2: t2, note: snapped && goalInfo.goal.kind === "len" ? "" : "belt length with the idler, rounded to whole teeth" };
     } else {
       var n2 = parseInt($("bt").value, 10);
       if (!(n2 > 0)) { bad("Enter the belt tooth count."); return; }
+      if (idlCfg) { var svI = idlCfg; idlCfg = null; var cp = centerFor(n2 * pitch, D1, D2); idlCfg = svI; if (cp) clearIdler(cp, D1, D2, unit); }
       var cc2 = centerFor(n2 * pitch, D1, D2);
+      if (cc2 !== null && idlCfg) { clearIdler(cc2, D1, D2, unit); cc2 = centerFor(n2 * pitch, D1, D2); }
       if (cc2 === null) { bad("This belt is too short to wrap both pulleys."); return; }
       setStatus(false, both(cc2), "", "Center Distance");
       tiles = tile(both(D1), "Pulley 1 Pitch Diameter", "") +
               tile(both(D2), "Pulley 2 Pitch Diameter", "") +
               ratioTile;
+      cur = { C: cc2, D1: D1, D2: D2, n: n2, pitch: pitch, t1: t1, t2: t2 };
       rows += row("Belt Pitch Length", both(n2 * pitch));
+      rows += idlRow(cc2, D1, D2);
       var list = sizesFor(pitch);
       if (list.indexOf(n2) !== -1) {
-        rows += row("WCP Sells This Size", "yes");
+        var bb = belt(pitch, radio("width"), n2);
+        rows += row("Sold By WCP", "Yes", bb ? ' &middot; <a class="buy" href="https://wcproducts.com/products/' + bb[0].toLowerCase() + '" target="_blank" rel="noopener">Buy Belt</a>' : "");
       } else {
         var b = null, a = null;
         list.forEach(function (n) { if (n < n2) b = n; if (n > n2 && a === null) a = n; });
-        rows += row("WCP Sells This Size", "no, nearest are " + [b, a].filter(function (x) { return x !== null; }).join(" and ") + " Teeth");
+        rows += row("Sold By WCP", "No, nearest are " + [b, a].filter(function (x) { return x !== null; }).join(" and ") + " Teeth");
       }
     }
     $("tiles").innerHTML = tiles;
     $("rows").innerHTML = rows;
     $("rows").closest(".table-wrap").hidden = !rows;
+    idlHint();
+    drawDrive();
   }
 
-  ["t1", "t2", "cd", "bt"].forEach(function (id) { $(id).addEventListener("input", calc); });
+  ["t1", "t2", "cd", "bt", "iod", "itn", "ix", "iy", "iwa"].forEach(function (id) { $(id).addEventListener("input", calc); });
   var lastUnit = "in";
   function onUnit() {
     var u = radio("unit") === "mm" ? "mm" : "in";
     if (u !== lastUnit) {
-      ["cd", "ex"].forEach(function (id) {
+      ["cd", "ex", "iod", "ix", "iy"].forEach(function (id) {
         var v = parseFloat($(id).value);
-        if (v > 0) $(id).value = +(u === "mm" ? v * 25.4 : v / 25.4).toFixed(u === "mm" ? 2 : 3);
+        if (isFinite(v) && (v !== 0)) $(id).value = +(u === "mm" ? v * 25.4 : v / 25.4).toFixed(u === "mm" ? 1 : 3);
       });
       lastUnit = u;
     }
     Array.prototype.forEach.call(document.querySelectorAll(".usfx"), function (e) { e.textContent = u; });
     calc();
   }
+  // Put the idler on the nearest run, pressing in a little on the chosen side.
+  function placeIdler(first) {
+    if (!cur) return;
+    var pk = cur.pitch === 5 ? "5" : "3", R1 = cur.D1 / 2, R2 = cur.D2 / 2, mmU = radio("unit") === "mm", k = mmU ? 1 : 1 / 25.4, dp = mmU ? 1 : 2;
+    var x = first ? cur.C / 2 : Math.max(0, Math.min(cur.C, (parseFloat($("ix").value) || 0) / k));
+    var od = parseFloat($("iod").value) || 0.75, rr = od * (mmU ? 1 : 25.4) / 2 + PROF[pk].land - PROF[pk].pl;
+    var top = first ? true : (parseFloat($("iy").value) || 0) >= 0, line = R1 + (R2 - R1) * x / cur.C, out = radio("iside") !== "in";
+    var mag = line + (out ? 0.5 : -0.5) * rr;
+    $("irun").value = ""; $("ix").value = +(x * k).toFixed(dp); $("iy").value = +((top ? mag : -mag) * k).toFixed(dp);
+  }
+  $("i1").addEventListener("change", function () { if (!idlPlaced) { idlPlaced = true; placeIdler(true); } });
+  // Starting wrap angle for the chosen pulley: a little less than the plain wrap for an inside idler, a little more for an outside one.
+  function defWrap() { var w = plainW[radio("iwp") === "2" ? "p2" : "p1"]; $("iwa").value = Math.max(1, Math.min(359, Math.round(w + (radio("iside") === "in" ? -10 : 10)))); }
+  ["is0", "is1"].forEach(function (id) { $(id).addEventListener("change", function () { defWrap(); placeIdler(false); calc(); }); });
+  ["g1", "wp0", "wp1"].forEach(function (id) { $(id).addEventListener("change", function () { defWrap(); calc(); }); });
+  var idlPlaced = false;
   ["u-in", "u-mm"].forEach(function (id) { $(id).addEventListener("change", onUnit); });
   ["ex"].forEach(function (id) { $(id).addEventListener("input", calc); });
-  ["b3", "b5", "m1", "m2", "w9", "w15"].forEach(function (id) { $(id).addEventListener("change", calc); });
+  ["b3", "b5", "m1", "m2", "w9", "w15", "i0", "i1", "ty0", "ty1", "g0", "ibelt"].forEach(function (id) { $(id).addEventListener("change", calc); });
   $("optTiles").addEventListener("click", function (e) {
     var b = e.target.closest ? e.target.closest(".save") : null;
     if (!b) return;
